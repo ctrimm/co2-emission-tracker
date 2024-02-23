@@ -7,7 +7,8 @@ import vercel from '@astrojs/vercel/static';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://astro-nomy.vercel.app",
+  site: 'https://ctrimm.github.io',
+  base: '/co2-emission-tracker',
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
