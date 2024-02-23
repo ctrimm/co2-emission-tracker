@@ -6,11 +6,11 @@ import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
 
 // Load the JSON object via the default export
-import json from "public/data/emissions_results.json";
+import emissionsResultsJSON from "public/data/emissions_results.json";
 ---
 
 <MainLayout title="CO2 Web Emissions Tracker">
-  <section class="space-y-6 pb-12 pt-16 lg:py-28">
+  <section class="space-y-6 pb-12 pt-16 lg:pt-28 lg:pb-12">
     <div
       class="container flex max-w-[64rem] flex-col items-center gap-5 text-center"
     >
@@ -59,7 +59,7 @@ import json from "public/data/emissions_results.json";
 
   <section
     id="data"
-    class="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-24"
+    class="container bg-slate-50 dark:bg-transparent py-8 md:py-12 lg:py-20"
   >
     <div
       class="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center"
@@ -68,14 +68,48 @@ import json from "public/data/emissions_results.json";
         Data
       </h2>
       <p
-        class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
+        class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
       >
-        Let's take a look at the data. The data is updated nightly and is
-        available on the GitHub repo.
+        Let's take a look at the data. It is updated nightly and is
+        available on the
+        <a
+          href={siteConfig.links.github}
+          target="_blank"
+          rel="noreferrer"
+          class="underline underline-offset-4"
+        >
+          GitHub repo</a>.
       </p>
     </div>
     <!-- Data Table from the CSV file -->
-    <div 
+    <!-- Iterate over emissionsResultsJSON and display in a table -->
+    <div class="mx-auto max-w-[58rem] overflow-x-auto pt-8">
+      <table class="w-full table-auto">
+        <thead>
+          <tr>
+            <th class="px-4 py-2">Scan Date</th>
+            <th class="px-4 py-2">Domain</th>
+            <th class="px-4 py-2">Is Green <br>Hosted?</th>
+            <th class="px-4 py-2">Total Bytes <br>Loaded</th>
+            <th class="px-4 py-2">Estimated CO2 <br>(grams)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {emissionsResultsJSON.map((result) => (
+            <tr>
+              <td class="border px-4 py-2">{result.date}</td>
+              <td class="border px-4 py-2">
+                <a href={`http://${result.domain}`} target="_blank" rel="noreferrer" class="underline underline-offset-4">
+                  {result.domain}
+                </a>
+              </td>
+              <td class="border px-4 py-2">{(result.isGreen) ? 'Yes': 'No'}</td>
+              <td class="border px-4 py-2">{result.totalBytes}</td>
+              <td class="border px-4 py-2">{result.estimatedCO2}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     <!-- <div
       class="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3"
     >
@@ -211,7 +245,76 @@ import json from "public/data/emissions_results.json";
       </p>
     </div> -->
   </section>
-  <section id="open-source" class="container py-8 md:py-12 lg:py-28">
+  <section id="how-it-works" class="container py-8 md:py-12 lg:py-20">
+    <div
+      class="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 pb-6 text-center"
+    >
+      <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+        How It Works
+      </h2>
+      <p
+        class="max-w-[65%] leading-normal text-muted-foreground sm:text-lg sm:leading-7"
+      >
+        CO2 Web Emissions Tracker leverages a few core techniques and software packages to help generate estimate CO2 Emissions. <br />
+        <a
+          href="https://developers.thegreenwebfoundation.org/co2js/explainer/methodologies-for-calculating-website-carbon/"
+          target="_blank"
+          rel="noreferrer"
+          class="underline underline-offset-4"
+        >Read More Details Here</a>.
+
+      </p>
+    </div>
+    <div
+      class="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-4"
+    >
+      <div class="relative overflow-hidden rounded-lg border bg-background p-2 hover:drop-shadow-[0_12px_12px_rgba(0,0,0,0.2)] dark:hover:drop-shadow-[0_35px_35px_rgba(255,255,255,0.2)]">
+        <div class="flex h-[250px] flex-col justify-between rounded-md p-5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database-zap"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 15 21.84"/><path d="M21 5V8"/><path d="M21 12L18 17H22L19 22"/><path d="M3 12A9 3 0 0 0 14.59 14.87"/></svg>
+          <div class="space-y-2">
+            <h3 class="font-bold">Data Center Usage</h3>
+            <p class="text-sm text-muted-foreground">
+              15% of Carbon emissions from electricity to power servers, and keep them cool.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="relative overflow-hidden rounded-lg border bg-background p-2 hover:drop-shadow-[0_12px_12px_rgba(0,0,0,0.2)] dark:hover:drop-shadow-[0_35px_35px_rgba(255,255,255,0.2)]">
+        <div class="flex h-[250px] flex-col justify-between rounded-md p-5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-network"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
+          <div class="space-y-2">
+            <h3 class="font-bold">Network Transfer</h3>
+            <p class="text-sm text-muted-foreground">
+              14% of Carbon emissions from electricity to power core networks, mobile networks, on-premise wifi, and wired routers.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="relative overflow-hidden rounded-lg border bg-background p-2 hover:drop-shadow-[0_12px_12px_rgba(0,0,0,0.2)] dark:hover:drop-shadow-[0_35px_35px_rgba(255,255,255,0.2)]">
+        <div class="flex h-[250px] flex-col justify-between rounded-md p-5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor-smartphone"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"/><path d="M10 19v-3.96 3.15"/><path d="M7 19h5"/><rect width="6" height="10" x="16" y="12" rx="2"/></svg>
+          <div class="space-y-2">
+            <h3 class="font-bold">End User Devices</h3>
+            <p class="text-sm text-muted-foreground">
+              52% of Carbon emissions from electricity to power devices like smartphones, tablets, laptops, desktops, and gaming consoles.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="relative overflow-hidden rounded-lg border bg-background p-2 hover:drop-shadow-[0_12px_12px_rgba(0,0,0,0.2)] dark:hover:drop-shadow-[0_35px_35px_rgba(255,255,255,0.2)]">
+        <div class="flex h-[250px] flex-col justify-between rounded-md p-5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-factory"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 18h1"/><path d="M12 18h1"/><path d="M7 18h1"/></svg>
+          <div class="space-y-2">
+            <h3 class="font-bold">Production</h3>
+            <p class="text-sm text-muted-foreground mt-3">
+              19% of Carbon emissions from electricity to power production of hardware, software, and infrastructure.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="open-source" class="container py-8 md:py-12 lg:py-20">
     <div
       class="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center"
     >
@@ -231,9 +334,7 @@ import json from "public/data/emissions_results.json";
           rel="noreferrer"
           class="underline underline-offset-4"
         >
-          GitHub
-        </a>
-         .
+          GitHub</a>.
       </p>
     </div>
   </section>

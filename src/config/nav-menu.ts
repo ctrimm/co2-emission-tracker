@@ -70,7 +70,7 @@ export const navMenuConfig: NavMenuConfig = {
   ],
   links: [
     {
-      title: "FAQ",
+      title: "Learn More",
       href: "/faq",
     },
     {
