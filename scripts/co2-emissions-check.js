@@ -1,8 +1,28 @@
 import { appendFileSync, existsSync, writeFileSync, readFileSync } from 'fs';
 import { hosting, co2 } from '@tgwf/co2';
+import { puppeteer } from 'puppeteer';
 
 // Initialize the CO2 estimation library
 const co2Emission = new co2();
+
+// Method to get page size
+async function getPageDataSize(url) {
+  const browser = await puppeteer.launch({ headless: false }); // Launch in non-headless mode to be more accurrate
+  const page = await browser.newPage();
+  let totalBytes = 0;
+
+  // Listen for all network requests and sum their sizes
+  page.on('response', async (response) => {
+    const headers = response.headers();
+    if (headers['content-length']) {
+      totalBytes += parseInt(headers['content-length'], 10);
+    }
+  });
+
+  await page.goto(url, { waitUntil: 'networkidle0' });
+  await browser.close();
+  return totalBytes;
+}
 
 // Gets the current date in DD-MM-YYYY format
 function getCurrentDate() {
@@ -49,9 +69,8 @@ async function processDomains(filePath) {
   for (let domain of domains) {
     if (domain) {
       const isGreen = await checkGreenHosting(domain);
-      // Example bytes value for demonstration; adjust as needed
-      const exampleBytes = 1000 * 1000 * 1000; // 1GB in bytes
-      const estimatedCO2 = estimateEmissions(exampleBytes, isGreen);
+      const totalBytes = await getPageDataSize(`http://${domain}`);
+      const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
       appendToCSV(outputCSV, { domain, isGreen, estimatedCO2 });
     }
   }
