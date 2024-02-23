@@ -65,9 +65,9 @@ function appendToJson(filePath, data) {
   let jsonData = [];
 
   // Check if the JSON file already exists and has content
-  if (fs.existsSync(filePath)) {
+  if (existsSync(filePath)) {
     // Read the current data and parse it
-    const existingData = fs.readFileSync(filePath, 'utf8');
+    const existingData = readFileSync(filePath, 'utf8');
     jsonData = existingData ? JSON.parse(existingData) : [];
   }
 
@@ -75,7 +75,7 @@ function appendToJson(filePath, data) {
   jsonData.push(data);
 
   // Write the updated data back to the JSON file
-  fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2), 'utf8');
+  writeFileSync(filePath, JSON.stringify(jsonData, null, 2), 'utf8');
 }
 
 // Process each domain from the file
