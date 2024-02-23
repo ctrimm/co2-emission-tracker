@@ -1,5 +1,5 @@
-const fs = require('fs');
-const { hosting, co2 } = require('@tgwf/co2');
+import { appendFileSync, existsSync, writeFileSync, readFileSync } from 'fs';
+import { hosting, co2 } from '@tgwf/co2';
 
 const co2Emission = new co2();
 
@@ -20,18 +20,18 @@ function estimateEmissions(bytes, isGreen) {
 
 function appendToCSV(filePath, data) {
   const csvContent = `${data.domain},${data.isGreen},${data.estimatedCO2}\n`;
-  fs.appendFileSync(filePath, csvContent, 'utf8');
+  appendFileSync(filePath, csvContent, 'utf8');
 }
 
 async function processDomains(filePath) {
   const outputCSV = 'co2_emissions_results.csv';
 
   // Check if the CSV file exists; if not, create it with headers
-  if (!fs.existsSync(outputCSV)) {
-    fs.writeFileSync(outputCSV, 'Domain,IsGreen,EstimatedCO2Grams\n', 'utf8');
+  if (!existsSync(outputCSV)) {
+    writeFileSync(outputCSV, 'Domain,IsGreen,EstimatedCO2Grams\n', 'utf8');
   }
 
-  const data = fs.readFileSync(filePath, 'utf8');
+  const data = readFileSync(filePath, 'utf8');
   const domains = data.split(/\r?\n/);
 
   for (let domain of domains) {
