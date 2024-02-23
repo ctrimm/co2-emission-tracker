@@ -2,7 +2,6 @@
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icon } from "astro-icon";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 type Props = {
   className?: string;
@@ -30,7 +29,7 @@ const { className } = Astro.props;
           rel="noreferrer"
           class="font-medium underline underline-offset-4"
         >
-          mickasmt
+          cdt5058
         </a>
          . Based on{" "}
         <a
@@ -43,12 +42,12 @@ const { className } = Astro.props;
         </a>
          . Hosted on{" "}
         <a
-          href="https://vercel.com"
+          href="https://ctrimm.github.io/co2-emission-tracker/"
           target="_blank"
           rel="noreferrer"
           class="font-medium underline underline-offset-4"
         >
-          Vercel
+          GitHub Pages
         </a>
          . The source code is available on{" "}
         <a
@@ -62,7 +61,5 @@ const { className } = Astro.props;
          .
       </p>
     </div>
-
-    <ThemeToggle client:idle />
   </div>
 </footer>

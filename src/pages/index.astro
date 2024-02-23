@@ -6,13 +6,13 @@ import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
 ---
 
-<MainLayout title="Astronomy">
+<MainLayout title="CO2 Web Emissions Tracker">
   <section class="space-y-6 pb-12 pt-16 lg:py-28">
     <div
       class="container flex max-w-[64rem] flex-col items-center gap-5 text-center"
     >
       <a
-        href="https://twitter.com/miickasmt"
+        href="https://twitter.com/cdt5058/status/1760840540378071176"
         class={cn(buttonVariants({ variant: "outline", size: "sm" }))}
         target="_blank"
       >
@@ -22,36 +22,33 @@ import Icon from "astro-icon";
       <h1
         class="font-heading text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl !leading-[1.1] text-balance"
       >
-        A modern example app built using
+        A simple interface to display
         <span class="text-gradient_indigo-purple">
-          Astro v4 <span class="font-sans font-bold">+</span> shadcn<span
-            class="font-sans font-bold">/</span
-          >ui.
+          Website Carbon Emission Data
         </span>
       </h1>
 
       <p
         class="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8 text-balance"
       >
-        I&apos;m building a modern example app with Astro v4 and based on
-        shadcn-ui/taxonomy.
+        Currently scanning <span class="font-bold">5</span> sites and their carbon emissions. Cron job run nightly.
       </p>
 
       <div class="flex justify-center space-x-2 md:space-x-4">
         <a
-          href="/docs/getting-started/"
+          href="#read-more"
           class={cn(buttonVariants({ size: "lg" }))}
         >
-          Get Started
+          Read More
         </a>
         <a
-          href={siteConfig.links.github}
+          href="https://github.com/ctrimm/co2-emission-tracker/blob/main/websites-to-check.txt"
           target="_blank"
           rel="noreferrer"
           class={cn(buttonVariants({ variant: "outline", size: "lg" }), "px-4")}
         >
           <Icon name="github" class="mr-2 size-5" />
-           Github
+           Add Site
         </a>
       </div>
     </div>
@@ -220,7 +217,7 @@ import Icon from "astro-icon";
       <p
         class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7"
       >
-        Astronomy is open source and powered by open source software. <br />{
+        CO2 Web Emissions Tracker is open source and powered by open source software. <br />{
           " "
         }
          The code is available on{" "}
