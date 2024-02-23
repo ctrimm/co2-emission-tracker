@@ -1,8 +1,16 @@
 import { appendFileSync, existsSync, writeFileSync, readFileSync } from 'fs';
 import { hosting, co2 } from '@tgwf/co2';
 
+// Initialize the CO2 estimation library
 const co2Emission = new co2();
 
+// Gets the current date in DD-MM-YYYY format
+function getCurrentDate() {
+  const today = new Date();
+  return `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+}
+
+// Check if a domain is hosted green
 async function checkGreenHosting(domain) {
   try {
     const isGreen = await hosting.check(domain, "myGreenWebApp");
@@ -14,21 +22,25 @@ async function checkGreenHosting(domain) {
   }
 }
 
+// Estimate CO2 emissions for a given number of bytes and hosting type
 function estimateEmissions(bytes, isGreen) {
   return co2Emission.perByte(bytes, isGreen).toFixed(3);
 }
 
+// Append data to the CSV file
 function appendToCSV(filePath, data) {
-  const csvContent = `${data.domain},${data.isGreen},${data.estimatedCO2}\n`;
+  const currentDate = getCurrentDate();
+  const csvContent = `${currentDate},${data.domain},${data.isGreen},${data.estimatedCO2}\n`;
   appendFileSync(filePath, csvContent, 'utf8');
 }
 
+// Process each domain from the file
 async function processDomains(filePath) {
-  const outputCSV = 'co2_emissions_results.csv';
+  const outputCSV = 'emissions_results.csv'; // Adjust this path as needed
 
   // Check if the CSV file exists; if not, create it with headers
   if (!existsSync(outputCSV)) {
-    writeFileSync(outputCSV, 'Domain,IsGreen,EstimatedCO2Grams\n', 'utf8');
+    writeFileSync(outputCSV, 'Date,Domain,IsGreen,EstimatedCO2Grams\n', 'utf8');
   }
 
   const data = readFileSync(filePath, 'utf8');
@@ -37,16 +49,15 @@ async function processDomains(filePath) {
   for (let domain of domains) {
     if (domain) {
       const isGreen = await checkGreenHosting(domain);
-      const exampleBytes = 1000 * 1000 * 1000; // 1GB expressed in bytes
+      // Example bytes value for demonstration; adjust as needed
+      const exampleBytes = 1000 * 1000 * 1000; // 1GB in bytes
       const estimatedCO2 = estimateEmissions(exampleBytes, isGreen);
-      console.log(`Domain: ${domain}, Green: ${isGreen}, CO2: ${estimatedCO2} grams`);
-
-      // Append the results to the CSV
       appendToCSV(outputCSV, { domain, isGreen, estimatedCO2 });
     }
   }
 }
 
+// File path should be passed as a command-line argument
 const filePath = process.argv[2];
 if (!filePath) {
   console.error('Please provide a file path containing URLs');

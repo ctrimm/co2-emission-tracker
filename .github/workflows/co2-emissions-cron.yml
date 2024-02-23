@@ -23,3 +23,11 @@ jobs:
 
       - name: Run CO2 Emissions Check
         run: node scripts/co2-emissions-check.js websites-to-check.txt
+
+      - name: Commit and push if there are changes
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add emissions_results.csv
+          git commit -m "Update emissions data" -a || echo "No changes to commit"
+          git push
