@@ -25,6 +25,12 @@ jobs:
 
       - name: Install CO2 library
         run: npm install @tgwf/co2
+      
+      - name: Install Puppeteer
+        run: npm install puppeteer
+
+      - name: Create data directory
+        run: mkdir -p ./data
 
       - name: Run CO2 Emissions Check
         run: node scripts/co2-emissions-check.js websites-to-check.txt

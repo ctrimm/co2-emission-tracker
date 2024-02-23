@@ -54,13 +54,13 @@ function estimateEmissions(bytes, isGreen) {
 // Append data to the CSV file
 function appendToCSV(filePath, data) {
   const currentDate = getCurrentDate();
-  const csvContent = `${currentDate},${data.domain},${data.isGreen},${data.estimatedCO2}\n`;
+  const csvContent = `${currentDate},${data.domain},${data.isGreen},${data.totalBytes},${data.estimatedCO2}\n`;
   appendFileSync(filePath, csvContent, 'utf8');
 }
 
 // Process each domain from the file
 async function processDomains(filePath) {
-  const outputCSV = '.data/emissions_results.csv'; // Adjust this path as needed
+  const outputCSV = 'data/emissions_results.csv'; // Adjust this path as needed
 
   // Check if the CSV file exists; if not, create it with headers
   if (!existsSync(outputCSV)) {
@@ -75,7 +75,7 @@ async function processDomains(filePath) {
       const isGreen = await checkGreenHosting(domain);
       const totalBytes = await getPageDataSize(`http://${domain}`);
       const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
-      appendToCSV(outputCSV, { domain, isGreen, estimatedCO2 });
+      appendToCSV(outputCSV, { domain, isGreen, totalBytes, estimatedCO2 });
     }
   }
 }
