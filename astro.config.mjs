@@ -7,8 +7,9 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://ctrimm.github.io',
-  base: '/co2-emission-tracker',
+  site: 'https://ctrimm.github.io/co2-emission-tracker',
+  base: '/',
+  trailingSlash: 'never',
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
