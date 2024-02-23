@@ -1,6 +1,6 @@
 import { appendFileSync, existsSync, writeFileSync, readFileSync } from 'fs';
 import { hosting, co2 } from '@tgwf/co2';
-import { puppeteer } from 'puppeteer';
+import puppeteer from 'puppeteer';
 
 // Initialize the CO2 estimation library
 const co2Emission = new co2();
