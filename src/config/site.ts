@@ -1,5 +1,5 @@
 import type { SiteConfig } from "@/types";
-import ogImage from "@/images/og.jpg";
+import ogImage from "/og-image.png";
 
 export const siteConfig: SiteConfig = {
   name: "CO2 Web Emissions Tracker",
