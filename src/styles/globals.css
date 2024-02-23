@@ -149,3 +149,11 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+.text-gradient_sky-emerald {
+  background: linear-gradient(90deg, #63f1de 0%, rgba(85, 247, 128, 0.9) 100%);
+  /* background: linear-gradient(83.21deg,#3245ff 0%,#bc52ee 100%); */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

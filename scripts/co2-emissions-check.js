@@ -5,6 +5,9 @@ import puppeteer from 'puppeteer';
 // Initialize the CO2 estimation library
 const co2Emission = new co2();
 
+// Define the path for the JSON file
+const jsonOutputPath = './public/data/emissions_results.json';
+
 // Method to get page size
 async function getPageDataSize(url) {
   const browser = await puppeteer.launch({ headless: true });
@@ -58,9 +61,27 @@ function appendToCSV(filePath, data) {
   appendFileSync(filePath, csvContent, 'utf8');
 }
 
+// Function to add data to the JSON file
+function appendToJson(filePath, data) {
+  let jsonData = [];
+
+  // Check if the JSON file already exists and has content
+  if (fs.existsSync(filePath)) {
+    // Read the current data and parse it
+    const existingData = fs.readFileSync(filePath, 'utf8');
+    jsonData = existingData ? JSON.parse(existingData) : [];
+  }
+
+  // Add the new data
+  jsonData.push(data);
+
+  // Write the updated data back to the JSON file
+  fs.writeFileSync(filePath, JSON.stringify(jsonData, null, 2), 'utf8');
+}
+
 // Process each domain from the file
 async function processDomains(filePath) {
-  const outputCSV = 'data/emissions_results.csv'; // Adjust this path as needed
+  const outputCSV = 'src/content/emissions_results.csv'; // Adjust this path as needed
 
   // Check if the CSV file exists; if not, create it with headers
   if (!existsSync(outputCSV)) {
@@ -76,6 +97,7 @@ async function processDomains(filePath) {
       const totalBytes = await getPageDataSize(`http://${domain}`);
       const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
       appendToCSV(outputCSV, { domain, isGreen, totalBytes, estimatedCO2 });
+      appendToJson(jsonOutputPath, record);
     }
   }
 }

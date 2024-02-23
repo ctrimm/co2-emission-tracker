@@ -41,7 +41,8 @@ jobs:
           git config --global user.name "GitHub Action"
           git status
           if [ -n "$(git status --porcelain)" ]; then
-            git add data/emissions_results.csv
+            git add src/content/emissions_results.csv
+            git add public/data/emissions_results.json
             git commit -m "Update emissions data"
             git push
           else

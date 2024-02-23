@@ -4,6 +4,9 @@ import { siteConfig } from "@/config/site";
 import MainLayout from "@/layouts/main-layout.astro";
 import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
+
+// Load the JSON object via the default export
+import json from "public/data/emissions_results.json";
 ---
 
 <MainLayout title="CO2 Web Emissions Tracker">
@@ -23,7 +26,7 @@ import Icon from "astro-icon";
         class="font-heading text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl !leading-[1.1] text-balance"
       >
         A simple interface to display
-        <span class="text-gradient_indigo-purple">
+        <span class="text-gradient_sky-emerald">
           Website Carbon Emission Data
         </span>
       </h1>
@@ -55,24 +58,25 @@ import Icon from "astro-icon";
   </section>
 
   <section
-    id="features"
+    id="data"
     class="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-24"
   >
     <div
       class="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center"
     >
       <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
-        Features
+        Data
       </h2>
       <p
         class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
       >
-        This project is a replication of Taxonomy using Astro v4 and shadcn/ui.
-        Some features, such as authentication, subscriptions and API routes,
-        have not been implemented yet.
+        Let's take a look at the data. The data is updated nightly and is
+        available on the GitHub repo.
       </p>
     </div>
-    <div
+    <!-- Data Table from the CSV file -->
+    <div 
+    <!-- <div
       class="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3"
     >
       <div class="relative overflow-hidden rounded-lg border bg-background p-2">
@@ -197,15 +201,15 @@ import Icon from "astro-icon";
           </div>
         </div>
       </div>
-    </div>
-    <div class="mx-auto text-center md:max-w-[58rem]">
+    </div> -->
+    <!-- <div class="mx-auto text-center md:max-w-[58rem]">
       <p
         class="leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
       >
         Astronomy also includes a blog and a full-featured documentation site
         built using Markdown and MDX from Astro.
       </p>
-    </div>
+    </div> -->
   </section>
   <section id="open-source" class="container py-8 md:py-12 lg:py-28">
     <div
