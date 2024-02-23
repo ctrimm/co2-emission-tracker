@@ -1,0 +1,5 @@
+Date,Domain,IsGreen,EstimatedBytes,EstimatedCO2Grams
+23-2-2024,www.epa.gov,false,1828669,0.732
+23-2-2024,www.recreation.gov,false,366201,0.147
+23-2-2024,www.va.gov,false,1731092,0.693
+23-2-2024,www.whitehouse.gov,false,522187,0.209
