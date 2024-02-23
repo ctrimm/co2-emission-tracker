@@ -36,7 +36,7 @@ jobs:
           CI: true
 
       - name: Upload Artifact for Deployment
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: ./dist
@@ -45,7 +45,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: github-pages
+      name: co2-emission-tracker
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Download Artifact
         uses: actions/download-artifact@v3
