@@ -60,7 +60,7 @@ function appendToCSV(filePath, data) {
 
 // Process each domain from the file
 async function processDomains(filePath) {
-  const outputCSV = 'emissions_results.csv'; // Adjust this path as needed
+  const outputCSV = '.data/emissions_results.csv'; // Adjust this path as needed
 
   // Check if the CSV file exists; if not, create it with headers
   if (!existsSync(outputCSV)) {

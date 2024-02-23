@@ -33,6 +33,11 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git add data/emissions_results.csv
-          git commit -m "Update emissions data" -a || echo "No changes to commit"
-          git push
+          git status
+          if [ -n "$(git status --porcelain)" ]; then
+            git add data/emissions_results.csv
+            git commit -m "Update emissions data"
+            git push
+          else
+            echo "No changes to commit"
+          fi
