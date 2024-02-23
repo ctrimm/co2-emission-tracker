@@ -6,6 +6,11 @@ on:
     - cron: '0 5 * * *'
   workflow_dispatch:  # Allows manual triggering of the workflow.
 
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: write
+  id-token: write
+
 jobs:
   co2-check:
     runs-on: ubuntu-latest
