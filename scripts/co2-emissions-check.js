@@ -7,7 +7,7 @@ const co2Emission = new co2();
 
 // Method to get page size
 async function getPageDataSize(url) {
-  const browser = await puppeteer.launch({ headless: true }); // Ensure Puppeteer runs in headless mode
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   let totalBytes = 0;
 
@@ -18,7 +18,12 @@ async function getPageDataSize(url) {
     }
   });
 
-  await page.goto(url, { waitUntil: 'networkidle0' });
+  try {
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  } catch (error) {
+    console.error(`Timeout or navigation error: ${error}`);
+  }
+
   await browser.close();
   return totalBytes;
 }
