@@ -7,11 +7,10 @@ const co2Emission = new co2();
 
 // Method to get page size
 async function getPageDataSize(url) {
-  const browser = await puppeteer.launch({ headless: false }); // Launch in non-headless mode to be more accurrate
+  const browser = await puppeteer.launch({ headless: true }); // Ensure Puppeteer runs in headless mode
   const page = await browser.newPage();
   let totalBytes = 0;
 
-  // Listen for all network requests and sum their sizes
   page.on('response', async (response) => {
     const headers = response.headers();
     if (headers['content-length']) {
