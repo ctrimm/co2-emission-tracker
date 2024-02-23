@@ -64,7 +64,7 @@ async function processDomains(filePath) {
 
   // Check if the CSV file exists; if not, create it with headers
   if (!existsSync(outputCSV)) {
-    writeFileSync(outputCSV, 'Date,Domain,IsGreen,EstimatedCO2Grams\n', 'utf8');
+    writeFileSync(outputCSV, 'Date,Domain,IsGreen,EstimatedBytes,EstimatedCO2Grams\n', 'utf8');
   }
 
   const data = readFileSync(filePath, 'utf8');
