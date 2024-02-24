@@ -26,5 +26,33 @@
     "isGreen": false,
     "estimatedCO2": "0.209",
     "totalBytes": 522187
+  },
+  {
+    "date": "24-2-2024",
+    "domain": "www.epa.gov",
+    "isGreen": false,
+    "estimatedCO2": "0.757",
+    "totalBytes": 1893281
+  },
+  {
+    "date": "24-2-2024",
+    "domain": "www.recreation.gov",
+    "isGreen": false,
+    "estimatedCO2": "0.147",
+    "totalBytes": 366348
+  },
+  {
+    "date": "24-2-2024",
+    "domain": "www.va.gov",
+    "isGreen": false,
+    "estimatedCO2": "0.581",
+    "totalBytes": 1451165
+  },
+  {
+    "date": "24-2-2024",
+    "domain": "www.whitehouse.gov",
+    "isGreen": false,
+    "estimatedCO2": "0.168",
+    "totalBytes": 419633
   }
 ]
