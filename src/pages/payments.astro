@@ -1,0 +1,39 @@
+---
+"use client"
+
+import { Payment, columns } from "../components/payments/columns"
+import { DataTable } from "../components/ui/data-table"
+import MainLayout from "../layouts/main-layout.astro";
+
+import { Checkbox } from "../components/ui/checkbox"
+
+async function getData(): Promise<Payment[]> {
+  // Fetch data from your API here.
+  return [
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    // ...
+  ]
+}
+
+const data = await getData();
+
+// Testing Dialog Component Interactivity...
+import { DialogWrapper } from "../components/ui/wrapper"
+---
+<MainLayout title="Pricing" mainClass="flex-1">
+  <section class="container flex flex-col gap-6 py-8 md:max-w-[64rem] md:py-12 lg:py-24">
+    <div>
+      <Checkbox id="terms" client:idle />
+
+      <DialogWrapper client:load />
+        <!-- <DataTable columns={columns} data={data} slot="data-table" client:idle/> -->
+    </div>
+  </section>
+</MainLayout>
+
+
