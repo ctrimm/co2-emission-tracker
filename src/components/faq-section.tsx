@@ -10,7 +10,7 @@ const faqData = [
 	  id: "item-1",
 	  question: "What percentage of carbon emissions is due to data center usage?",
 	  answer: "Data centers contribute to approximately 15% of the carbon emissions attributed to the electricity required to power servers and the cooling systems that keep them operational.",
-	  source: "https://www.datacenterdynamics.com/en/analysis/how-much-co2-do-data-centers-produce/"
+	  source: "https://www.datacenterdynamics.com/en/opinions/data-center-sustainability/"
 	},
 	{
 	  id: "item-2",
@@ -34,7 +34,7 @@ const faqData = [
 	  id: "item-5",
 	  question: "How can data centers reduce their carbon footprint?",
 	  answer: "Data centers can reduce their carbon footprint by using renewable energy sources, improving energy efficiency through advanced cooling systems, and employing server virtualization to maximize hardware usage.",
-	  source: "https://www.epa.gov/greenpower/data-center-efficiency-and-green-power"
+	  source: "https://blog.datacentersystems.com/sustainable-data-center-infrastructure-reducing-the-carbon-footprint-of-hardware"
 	},
 	{
 	  id: "item-6",
@@ -46,7 +46,7 @@ const faqData = [
 	  id: "item-7",
 	  question: "Are there best practices for individuals to reduce the carbon footprint of their device usage?",
 	  answer: "Individuals can reduce the carbon footprint of their device usage by adjusting energy-saving settings, reducing screen brightness, disconnecting chargers when not in use, and recycling old devices responsibly.",
-	  source: "https://www.energy.gov/energysaver/articles/how-save-energy-and-reduce-electronic-waste-while-working-home"
+	  source: "https://www.energy.gov/energysaver/energy-saver-guide-tips-saving-money-and-energy-home"
 	}
   ];
 
