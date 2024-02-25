@@ -39,6 +39,7 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+          git pull origin
           git status
           if [ -n "$(git status --porcelain)" ]; then
             git add src/content/emissions_results.csv
