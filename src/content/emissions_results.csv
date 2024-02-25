@@ -17,3 +17,13 @@ Date,Domain,IsGreen,EstimatedBytes,EstimatedCO2Grams
 25-2-2024,www.weather.gov,true,695158,0.241
 25-2-2024,www.ssa.gov,true,412758,0.143
 25-2-2024,www.studentaid.gov,true,0,0.000
+25-2-2024,www.epa.gov,false,1893192,0.757
+25-2-2024,www.recreation.gov,false,484830,0.194
+25-2-2024,www.va.gov,false,1815628,0.726
+25-2-2024,www.whitehouse.gov,false,495573,0.198
+25-2-2024,www.dhs.gov,true,1463750,0.507
+25-2-2024,www.irs.gov,true,2307949,0.799
+25-2-2024,www.cdc.gov,true,2527623,0.875
+25-2-2024,www.weather.gov,true,548996,0.190
+25-2-2024,www.ssa.gov,true,266798,0.092
+25-2-2024,www.studentaid.gov,true,0,0.000
