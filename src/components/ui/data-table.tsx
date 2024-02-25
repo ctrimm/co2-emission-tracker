@@ -4,9 +4,11 @@ import * as React from "react"
 
 import {
   type ColumnDef,
+  type ColumnFiltersState,
   type SortingState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -27,12 +29,16 @@ interface DataTableProps<TData, TValue> {
 }
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
 
   const table = useReactTable({
     data,
@@ -41,14 +47,26 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   })
 
   return (
-    <div>
-
+    <div className="min-h-32">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter domains..."
+          value={(table.getColumn("domain")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("domain")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -56,7 +74,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} style={{ width: header.column.columnDef.meta?.size || 'auto' }}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(

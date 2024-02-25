@@ -5,8 +5,11 @@ import MainLayout from "@/layouts/main-layout.astro";
 import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
 
+import { TableWrapper } from "@/components/ui/wrapper"
+
 // Load the JSON object via the default export
 import emissionsResultsJSON from "public/data/emissions_results.json";
+
 ---
 
 <MainLayout title="CO2 Web Emissions Tracker">
@@ -34,7 +37,7 @@ import emissionsResultsJSON from "public/data/emissions_results.json";
       <p
         class="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8 text-balance"
       >
-        Currently scanning <span class="font-bold">5</span> sites and their carbon emissions. Cron job run nightly.
+        Currently scanning <span class="font-bold">10</span> sites and their carbon emissions. Cron job run nightly.
       </p>
 
       <div class="flex justify-center space-x-2 md:space-x-4">
@@ -59,7 +62,7 @@ import emissionsResultsJSON from "public/data/emissions_results.json";
 
   <section
     id="data"
-    class="container bg-slate-50 dark:bg-transparent py-8 md:py-12 lg:py-20"
+    class="container h-[58rem] bg-slate-50 dark:bg-transparent py-8 md:py-12 lg:py-20"
   >
     <div
       class="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center"
@@ -71,7 +74,7 @@ import emissionsResultsJSON from "public/data/emissions_results.json";
         class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
       >
         Let's take a look at the data. It is updated nightly and is
-        available on the
+        available at the
         <a
           href={siteConfig.links.github}
           target="_blank"
@@ -83,8 +86,9 @@ import emissionsResultsJSON from "public/data/emissions_results.json";
     </div>
     <!-- Data Table from the CSV file -->
     <!-- Iterate over emissionsResultsJSON and display in a table -->
-    <div class="mx-auto max-w-[58rem] overflow-x-auto pt-8">
-      <table class="w-full table-auto">
+    <div class="mx-auto max-w-[64rem] overflow-x-auto pt-8">
+      <TableWrapper client:load />
+      <!-- <table class="w-full table-auto">
         <thead>
           <tr>
             <th class="px-4 py-2">Scan Date</th>
@@ -109,7 +113,7 @@ import emissionsResultsJSON from "public/data/emissions_results.json";
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> -->
     <!-- <div
       class="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3"
     >

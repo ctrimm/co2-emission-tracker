@@ -1,13 +1,12 @@
 ---
 "use client"
 
-import { Payment, columns } from "../components/payments/columns"
-import { DataTable } from "../components/ui/data-table"
+import { Emission, columns } from "../components/emission/columns"
 import MainLayout from "../layouts/main-layout.astro";
 
 import { Checkbox } from "../components/ui/checkbox"
 
-async function getData(): Promise<Payment[]> {
+async function getData(): Promise<Emission[]> {
   // Fetch data from your API here.
   return [
     {
@@ -31,9 +30,6 @@ import { TableWrapper } from "../components/ui/wrapper"
       <Checkbox id="terms" client:idle />
 
       <TableWrapper client:load />
-        <!-- <DataTable columns={columns} data={data} slot="data-table" client:idle/> -->
     </div>
   </section>
 </MainLayout>
-
-
