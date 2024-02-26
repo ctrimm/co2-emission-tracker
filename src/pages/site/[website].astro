@@ -30,8 +30,6 @@ import emissionsResults from "public/data/emissions_results.json";
 
 const websiteData = emissionsResults.filter((result) => result.domain == website);
 
-
-console.log('troubleshooting websiteData - ', websiteData.length, websiteData);
 // iterate over the data and find the latest data
 const latestData = websiteData[websiteData.length - 1];
 
