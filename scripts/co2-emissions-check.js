@@ -52,7 +52,7 @@ async function checkGreenHosting(domain) {
 
 // Estimate CO2 emissions for a given number of bytes and hosting type
 function estimateEmissions(bytes, isGreen) {
-  return co2Emission.perByte(bytes, isGreen).toFixed(3);
+  return parseFloat(co2Emission.perByte(bytes, isGreen).toFixed(3));
 }
 
 // Append data to the CSV file

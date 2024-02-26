@@ -78,7 +78,8 @@ export const columns: ColumnDef<Emission>[] = [
       )
     },
     cell: ({ row }) => {
-      return <div className="text-center">{row.getValue("totalBytes")}</div>
+      // If the totalBytes is `0` then we display `-` instead of `0`
+      return <div className="text-center">{(row.getValue("totalBytes") !== 0) ? row.getValue("totalBytes") : '-'}</div>
     }
   },
   {

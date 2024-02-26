@@ -244,7 +244,7 @@
     "name": "EPA.gov",
     "industry": "Public Sector",
     "isGreen": false,
-    "estimatedCO2": "0.757",
+    "estimatedCO2": 0.757,
     "totalBytes": 1893191
   },
   {
@@ -253,7 +253,7 @@
     "name": "Recreation.gov",
     "industry": "Public Sector",
     "isGreen": false,
-    "estimatedCO2": "0.147",
+    "estimatedCO2": 0.147,
     "totalBytes": 366220
   },
   {
@@ -262,7 +262,7 @@
     "name": "VA.gov",
     "industry": "Public Sector",
     "isGreen": false,
-    "estimatedCO2": "0.727",
+    "estimatedCO2": 0.727,
     "totalBytes": 1816714
   },
   {
@@ -271,7 +271,7 @@
     "name": "Whitehouse.gov",
     "industry": "Public Sector",
     "isGreen": false,
-    "estimatedCO2": "0.241",
+    "estimatedCO2": 0.241,
     "totalBytes": 602082
   },
   {
@@ -280,7 +280,7 @@
     "name": "Chase.com",
     "industry": "Financial Services",
     "isGreen": true,
-    "estimatedCO2": "0.188",
+    "estimatedCO2": 0.188,
     "totalBytes": 543638
   },
   {
@@ -289,7 +289,7 @@
     "name": "BankofAmerica.com",
     "industry": "Financial Services",
     "isGreen": false,
-    "estimatedCO2": "0.101",
+    "estimatedCO2": 0.101,
     "totalBytes": 253102
   },
   {
@@ -298,7 +298,7 @@
     "name": "WellsFargo.com",
     "industry": "Financial Services",
     "isGreen": true,
-    "estimatedCO2": "0.148",
+    "estimatedCO2": 0.148,
     "totalBytes": 426405
   },
   {
@@ -307,7 +307,7 @@
     "name": "Citibank.com",
     "industry": "Financial Services",
     "isGreen": true,
-    "estimatedCO2": "0.000",
+    "estimatedCO2": 0.000,
     "totalBytes": 209
   },
   {
@@ -316,7 +316,7 @@
     "name": "AmericanExpress.com",
     "industry": "Financial Services",
     "isGreen": true,
-    "estimatedCO2": "0.216",
+    "estimatedCO2": 0.216,
     "totalBytes": 625057
   },
   {
@@ -325,7 +325,7 @@
     "name": "Twitter.com",
     "industry": "Social Media",
     "isGreen": false,
-    "estimatedCO2": "0.298",
+    "estimatedCO2": 0.298,
     "totalBytes": 745544
   },
   {
@@ -334,7 +334,7 @@
     "name": "Facebook.com",
     "industry": "Social Media",
     "isGreen": true,
-    "estimatedCO2": "0.105",
+    "estimatedCO2": 0.105,
     "totalBytes": 303036
   },
   {
@@ -343,7 +343,7 @@
     "name": "Instagram.com",
     "industry": "Social Media",
     "isGreen": true,
-    "estimatedCO2": "0.436",
+    "estimatedCO2": 0.436,
     "totalBytes": 1258895
   },
   {
@@ -352,7 +352,7 @@
     "name": "LinkedIn.com",
     "industry": "Social Media",
     "isGreen": true,
-    "estimatedCO2": "0.027",
+    "estimatedCO2": 0.027,
     "totalBytes": 77092
   },
   {
@@ -361,7 +361,7 @@
     "name": "Pinterest.com",
     "industry": "Social Media",
     "isGreen": false,
-    "estimatedCO2": "0.262",
+    "estimatedCO2": 0.262,
     "totalBytes": 653766
   },
   {
@@ -370,7 +370,7 @@
     "name": "Amazon.com",
     "industry": "E-commerce",
     "isGreen": true,
-    "estimatedCO2": "0.007",
+    "estimatedCO2": 0.007,
     "totalBytes": 21037
   },
   {
@@ -379,7 +379,7 @@
     "name": "eBay.com",
     "industry": "E-commerce",
     "isGreen": true,
-    "estimatedCO2": "0.171",
+    "estimatedCO2": 0.171,
     "totalBytes": 494516
   },
   {
@@ -388,7 +388,7 @@
     "name": "Walmart.com",
     "industry": "E-commerce",
     "isGreen": true,
-    "estimatedCO2": "0.307",
+    "estimatedCO2": 0.307,
     "totalBytes": 885598
   },
   {
@@ -397,7 +397,7 @@
     "name": "Target.com",
     "industry": "E-commerce",
     "isGreen": true,
-    "estimatedCO2": "0.552",
+    "estimatedCO2": 0.552,
     "totalBytes": 1593352
   },
   {
@@ -406,7 +406,7 @@
     "name": "BestBuy.com",
     "industry": "E-commerce",
     "isGreen": true,
-    "estimatedCO2": "0.545",
+    "estimatedCO2": 0.545,
     "totalBytes": 1573943
   },
   {
@@ -415,7 +415,7 @@
     "name": "Apple.com",
     "industry": "Technology",
     "isGreen": true,
-    "estimatedCO2": "0.744",
+    "estimatedCO2": 0.744,
     "totalBytes": 2149395
   },
   {
@@ -424,7 +424,7 @@
     "name": "Microsoft.com",
     "industry": "Technology",
     "isGreen": true,
-    "estimatedCO2": "0.299",
+    "estimatedCO2": 0.299,
     "totalBytes": 864010
   },
   {
@@ -433,7 +433,7 @@
     "name": "Google.com",
     "industry": "Technology",
     "isGreen": true,
-    "estimatedCO2": "0.192",
+    "estimatedCO2": 0.192,
     "totalBytes": 555421
   },
   {
@@ -442,7 +442,7 @@
     "name": "IBM.com",
     "industry": "Technology",
     "isGreen": true,
-    "estimatedCO2": "1.243",
+    "estimatedCO2": 1.243,
     "totalBytes": 3591574
   },
   {
@@ -451,7 +451,7 @@
     "name": "Oracle.com",
     "industry": "Technology",
     "isGreen": true,
-    "estimatedCO2": "0.297",
+    "estimatedCO2": 0.297,
     "totalBytes": 857447
   },
   {
@@ -460,7 +460,7 @@
     "name": "Netflix.com",
     "industry": "Entertainment",
     "isGreen": true,
-    "estimatedCO2": "0.886",
+    "estimatedCO2": 0.886,
     "totalBytes": 2559123
   },
   {
@@ -469,7 +469,7 @@
     "name": "Hulu.com",
     "industry": "Entertainment",
     "isGreen": true,
-    "estimatedCO2": "1.463",
+    "estimatedCO2": 1.463,
     "totalBytes": 4225402
   },
   {
@@ -478,7 +478,7 @@
     "name": "DisneyPlus.com",
     "industry": "Entertainment",
     "isGreen": true,
-    "estimatedCO2": "0.382",
+    "estimatedCO2": 0.382,
     "totalBytes": 1102593
   },
   {
@@ -487,7 +487,7 @@
     "name": "HBO.com",
     "industry": "Entertainment",
     "isGreen": true,
-    "estimatedCO2": "0.828",
+    "estimatedCO2": 0.828,
     "totalBytes": 2393106
   },
   {
@@ -496,7 +496,7 @@
     "name": "Sling.com",
     "industry": "Entertainment",
     "isGreen": false,
-    "estimatedCO2": "0.146",
+    "estimatedCO2": 0.146,
     "totalBytes": 365295
   },
   {
@@ -505,7 +505,7 @@
     "name": "UPS.com",
     "industry": "Logistics",
     "isGreen": true,
-    "estimatedCO2": "0.000",
+    "estimatedCO2": 0.000,
     "totalBytes": 63
   },
   {
@@ -514,7 +514,7 @@
     "name": "Fedex.com",
     "industry": "Logistics",
     "isGreen": true,
-    "estimatedCO2": "0.000",
+    "estimatedCO2": 0.000,
     "totalBytes": 0
   },
   {
@@ -523,7 +523,7 @@
     "name": "USPS.com",
     "industry": "Logistics",
     "isGreen": false,
-    "estimatedCO2": "0.583",
+    "estimatedCO2": 0.583,
     "totalBytes": 1458295
   },
   {
@@ -532,7 +532,7 @@
     "name": "DHL.com",
     "industry": "Logistics",
     "isGreen": true,
-    "estimatedCO2": "0.000",
+    "estimatedCO2": 0.000,
     "totalBytes": 0
   },
   {
@@ -541,7 +541,7 @@
     "name": "LaserShip.com",
     "industry": "Logistics",
     "isGreen": true,
-    "estimatedCO2": "5.698",
+    "estimatedCO2": 5.698,
     "totalBytes": 16460934
   }
 ]
