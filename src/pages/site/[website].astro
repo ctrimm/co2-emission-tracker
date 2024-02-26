@@ -1,0 +1,228 @@
+---
+import React from "react";
+import { siteConfig } from "@/config/site";
+import MainLayout from "@/layouts/main-layout.astro";
+import { AreaChartWrapper } from "@/components/ui/wrapper";
+import { cn } from "@/lib/utils"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+// import sites to check
+import sites from "public/data/sites_to_check.json";
+
+export function getStaticPaths() {
+  return sites.map((website: string) => ({ params: { website } }));
+}
+
+const { website } = Astro.params;
+
+// import the emissions data set
+import emissionsResults from "public/data/emissions_results.json";
+
+// iterate over emissions and find all the mataches on the website variable and store it in a variable
+
+const websiteData = emissionsResults.filter((result) => result.domain == website);
+console.log(websiteData);
+
+// iterate over the data and find the latest data
+const latestData = websiteData[websiteData.length - 1]
+
+// average grams per last 7 page loads for this website from the websiteData var
+const averageGramsPerLoad = websiteData.reduce((acc, cur) => acc + cur.estimatedCO2, 0) / websiteData.length;
+
+const latestCardInformation = [
+  {
+    cardTitle: "Total Indexes",
+    cardContent: websiteData.length,
+    cardFooter: "~3 hours ago",
+  },
+  {
+    cardTitle: "Green Hosted?",
+    cardContent: latestData.isGreen ? 'YES' : 'NO',
+    cardFooter: "1 hour ago",
+  },
+  {
+    cardTitle: "Last 7 Page Loads",
+    cardContent: `${averageGramsPerLoad.toFixed(3)} g`,
+    cardFooter: "avg. per load",
+  },
+  {
+    cardTitle: "# of Coffees",
+    cardContent: "1,830",
+    cardFooter: "for every 1M Visitors",
+  },
+]
+
+const trendCardInfo = [
+  {
+    cardTitle: "Emissions Trending",
+    cardContent: "UP",
+    cardFooter: "~3 hours ago",
+  },
+  {
+    cardTitle: "Green Hosted?",
+    cardContent: "Yes",
+    cardFooter: "1 hour ago",
+  },
+  {
+    cardTitle: "Grams Per Page Load",
+    cardContent: "0.732g",
+    cardFooter: "1 hour ago",
+  },
+]
+
+const data = [
+  {
+    name: "19-2-2024",
+    uv: 4000,
+    pv: 2400,
+    amt: 2400
+  },
+  {
+    name: "20-2-2024",
+    uv: 3000,
+    pv: 1398,
+    amt: 2210
+  },
+  {
+    name: "21-2-2024",
+    uv: 2000,
+    pv: 9800,
+    amt: 2290
+  },
+  {
+    name: "22-2-2024",
+    uv: 2780,
+    pv: 3908,
+    amt: 2000
+  },
+  {
+    name: "23-2-2024",
+    uv: 1890,
+    pv: 4800,
+    amt: 2181
+  },
+  {
+    name: "24-2-2024",
+    uv: 2390,
+    pv: 3800,
+    amt: 2500
+  },
+  {
+    name: "25-2-2024",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100
+  }
+];
+---
+<MainLayout title="CO2 Web Emissions Tracker">
+  <section
+    id="data"
+    class="container bg-slate-50 dark:bg-transparent py-4 md:py-6 lg:py-10"
+  >
+    <div
+      class="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center"
+    >
+      <h5 class="font-heading text-lg leading-[1.1] sm:text-xl md:text-xl">
+        Viewing Results For
+      </h5>
+      <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+        {website}
+      </h2>
+      <p
+        class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
+      >
+        Let's take a look at the carbon emissions data for {website}. It is updated nightly and is
+        available at the
+        <a
+          href={siteConfig.links.github}
+          target="_blank"
+          rel="noreferrer"
+          class="underline underline-offset-4"
+        >
+          GitHub repo</a>.
+      </p>
+    </div>
+  </section>
+  <section id="dashboard" class="container py-8 md:py-12 lg:py-20">
+    <div class="flex items-center justify-between space-y-2">
+      <h2 class="text-3xl font-bold tracking-tight">
+        Dashboard
+      </h2>
+    </div>
+    <!-- Individual Cards For Top-Level Metrics -->
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 py-4">
+      {latestCardInformation.map((card) => (
+        <Card>
+          <CardHeader>
+            <CardTitle className="tracking-tight text-sm font-medium">{card.cardTitle}</CardTitle>
+            {card.cardDescription ? <CardDescription>{(card.cardDescription)}</CardDescription> : ''}
+          </CardHeader>
+          <CardContent>
+            <p class="text-6xl font-bold text-center">{card.cardContent}</p>
+          </CardContent>
+          <CardFooter>
+            <p class="text-xs text-muted-foreground">{card.cardFooter}</p>
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+    <!-- Area Chart Div -->
+    <Card>
+      <CardHeader>
+        <CardTitle>Last 7 scans</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <AreaChartWrapper client:load data={data} />
+      </CardContent>
+    </Card>
+    <!-- Trending Cards -->
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 py-4">
+      {trendCardInfo.map((card) => (
+        <Card>
+          <CardHeader>
+            <CardTitle className="tracking-tight text-sm font-medium">{card.cardTitle}</CardTitle>
+            {card.cardDescription ? <CardDescription>{(card.cardDescription)}</CardDescription> : ''}
+          </CardHeader>
+          <CardContent>
+            <p class="text-6xl font-bold text-center">{card.cardContent}</p>
+          </CardContent>
+          <CardFooter>
+            <p class="text-xs text-muted-foreground">{card.cardFooter}</p>
+          </CardFooter>
+        </Card>
+      ))}
+  </section>
+  <section id="open-source" class="container py-8 md:py-12 lg:py-20">
+    <div
+      class="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center"
+    >
+      <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+        Proudly Open Source
+      </h2>
+      <p
+        class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7"
+      >
+        CO2 Web Emissions Tracker is open source and powered by open source software. <br />{
+          " "
+        }
+         The code is available on{" "}
+        <a
+          href={siteConfig.links.github}
+          target="_blank"
+          rel="noreferrer"
+          class="underline underline-offset-4"
+        >
+          GitHub</a>.
+      </p>
+    </div>
+  </section>
+</MainLayout>

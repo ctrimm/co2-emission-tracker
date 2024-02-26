@@ -8,7 +8,7 @@ import Icon from "astro-icon";
 import { TableWrapper } from "@/components/ui/wrapper"
 
 // Load the JSON object via the default export
-import emissionsResultsJSON from "public/data/emissions_results.json";
+// import emissionsResultsJSON from "public/data/emissions_results.json";
 
 ---
 
@@ -42,7 +42,7 @@ import emissionsResultsJSON from "public/data/emissions_results.json";
 
       <div class="flex justify-center space-x-2 md:space-x-4">
         <a
-          href="#read-more"
+          href="#how-it-works"
           class={cn(buttonVariants({ size: "lg" }))}
         >
           Read More
@@ -343,3 +343,16 @@ import emissionsResultsJSON from "public/data/emissions_results.json";
     </div>
   </section>
 </MainLayout>
+
+<!-- Smooth Scroll Style -->
+<style>
+  :global(html) {
+    color: hsl(var(--colour-text-hue) var(--colour-text-saturation) var(--colour-text-luminance));
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) {
+      scroll-behavior: auto;
+    }
+  }
+</style>

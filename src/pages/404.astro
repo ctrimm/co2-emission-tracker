@@ -1,0 +1,74 @@
+---
+// import sites to check
+// import sites from "public/data/sites_to_check.json";
+
+// export function getStaticPaths() {
+//   return sites.map((website: string) => ({ params: { website } }));
+// }
+
+// const { website } = Astro.params;
+
+import { buttonVariants } from "@/components/ui/button";
+import { siteConfig } from "@/config/site";
+import MainLayout from "@/layouts/main-layout.astro";
+import { cn } from "@/lib/utils";
+import Icon from "astro-icon";
+---
+<MainLayout title="CO2 Web Emissions Tracker">
+  <section class="space-y-6 pb-12 pt-16 lg:pt-28 lg:pb-12">
+    <div
+      class="container flex max-w-[64rem] flex-col items-center gap-5 text-center"
+    >
+      <h1
+        class="font-heading text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl !leading-[1.1] text-balance"
+      >
+        That domain has not yet been
+        <span class="text-gradient_orange-red">
+            indexed for CO2 Emissions!
+        </span>
+      </h1>
+
+      <div class="flex justify-center space-x-2 md:space-x-4">
+        <a
+          href="/co2-emission-tracker"
+          class={cn(buttonVariants({ size: "lg" }))}
+        >
+          Head Home
+        </a>
+        <a
+          href="https://github.com/ctrimm/co2-emission-tracker/blob/main/websites-to-check.txt"
+          target="_blank"
+          rel="noreferrer"
+          class={cn(buttonVariants({ variant: "outline", size: "lg" }), "px-4")}
+        >
+          <Icon name="github" class="mr-2 size-5" />
+           Add A Site Here
+        </a>
+      </div>
+    </div>
+  </section>
+  <section id="open-source" class="container py-8 md:py-12 lg:py-20">
+    <div
+      class="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center"
+    >
+      <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+        Proudly Open Source
+      </h2>
+      <p
+        class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7"
+      >
+        CO2 Web Emissions Tracker is open source and powered by open source software. <br />{
+          " "
+        }
+         The code is available on{" "}
+        <a
+          href={siteConfig.links.github}
+          target="_blank"
+          rel="noreferrer"
+          class="underline underline-offset-4"
+        >
+          GitHub</a>.
+      </p>
+    </div>
+  </section>
+</MainLayout>

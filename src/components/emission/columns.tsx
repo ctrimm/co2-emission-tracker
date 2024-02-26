@@ -10,7 +10,7 @@ export type Emission = {
   date: string
   domain: string
   isGreen: boolean;
-  estimatedCO2: string
+  estimatedCO2: number
   totalBytes: number
   cupsOfCoffee: number
 }
@@ -32,6 +32,9 @@ export const columns: ColumnDef<Emission>[] = [
   },
   {
     accessorKey: "domain",
+    cell: ({ row }) => {
+      return <a href={`/site/${row.getValue("domain")}`} className="text-blue-500 flex underline underline-offset-4">{row.getValue("domain")}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-arrow-up-right-from-square mt-1 ml-1"><path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/><path d="m21 3-9 9"/><path d="M15 3h6v6"/></svg></a>
+    },
     header: ({ column }) => {
       return (
         <Button
@@ -57,6 +60,9 @@ export const columns: ColumnDef<Emission>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      return <div className="text-center">{row.getValue("isGreen") ? "Yes" : "No"}</div>
+    }
   },
   {
     accessorKey: "totalBytes",
@@ -71,6 +77,9 @@ export const columns: ColumnDef<Emission>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      return <div className="text-center">{row.getValue("totalBytes")}</div>
+    }
   },
   {
     accessorKey: "estimatedCO2",
@@ -85,6 +94,9 @@ export const columns: ColumnDef<Emission>[] = [
         </Button>
       )
     },
+    cell: ({ row }) => {
+      return <div className="text-center">{row.getValue("estimatedCO2")}</div>
+    }
   },
   {
     accessorKey: "cupsOfCoffee",
@@ -98,7 +110,7 @@ export const columns: ColumnDef<Emission>[] = [
       const pageviews = 1000
       const formatted = ((estCO2 * pageviews) / estCO2ForCoffee).toFixed(2)
  
-      return <div className="text-right font-medium">{formatted}</div>
+      return <div className="text-center">{formatted}</div>
     },
   },
 ]

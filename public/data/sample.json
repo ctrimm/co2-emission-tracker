@@ -3,21 +3,21 @@
     "date": "23-02-2024",
     "domain": "example.com",
     "isGreen": true,
-    "estimatedCO2": "0.123",
+    "estimatedCO2": 0.123,
     "totalBytes": 1048576
   },
   {
     "date": "23-02-2024",
     "domain": "anotherexample.com",
     "isGreen": false,
-    "estimatedCO2": "0.456",
+    "estimatedCO2": 0.456,
     "totalBytes": 2097152
   },
   {
     "date": "23-02-2024",
     "domain": "yetanotherexample.com",
     "isGreen": true,
-    "estimatedCO2": "0.789",
+    "estimatedCO2": 0.789,
     "totalBytes": 3145728
   }
 ]
