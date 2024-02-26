@@ -152,7 +152,7 @@
     "domain": "www.studentaid.gov",
     "industry": "Public Sector",
     "isGreen": true,
-    "estimatedCO2": 0.000,
+    "estimatedCO2": 0,
     "totalBytes": 0
   },
   {
@@ -235,7 +235,313 @@
     "date": "26-2-2024",
     "domain": "www.studentaid.gov",
     "isGreen": true,
-    "estimatedCO2": 0.000,
+    "estimatedCO2": 0,
     "totalBytes": 0
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.epa.gov",
+    "name": "EPA.gov",
+    "industry": "Public Sector",
+    "isGreen": false,
+    "estimatedCO2": "0.757",
+    "totalBytes": 1893191
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.recreation.gov",
+    "name": "Recreation.gov",
+    "industry": "Public Sector",
+    "isGreen": false,
+    "estimatedCO2": "0.147",
+    "totalBytes": 366220
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.va.gov",
+    "name": "VA.gov",
+    "industry": "Public Sector",
+    "isGreen": false,
+    "estimatedCO2": "0.727",
+    "totalBytes": 1816714
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.whitehouse.gov",
+    "name": "Whitehouse.gov",
+    "industry": "Public Sector",
+    "isGreen": false,
+    "estimatedCO2": "0.241",
+    "totalBytes": 602082
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.chase.com",
+    "name": "Chase.com",
+    "industry": "Financial Services",
+    "isGreen": true,
+    "estimatedCO2": "0.188",
+    "totalBytes": 543638
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.bankofamerica.com",
+    "name": "BankofAmerica.com",
+    "industry": "Financial Services",
+    "isGreen": false,
+    "estimatedCO2": "0.101",
+    "totalBytes": 253102
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.wellsfargo.com",
+    "name": "WellsFargo.com",
+    "industry": "Financial Services",
+    "isGreen": true,
+    "estimatedCO2": "0.148",
+    "totalBytes": 426405
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.citibank.com",
+    "name": "Citibank.com",
+    "industry": "Financial Services",
+    "isGreen": true,
+    "estimatedCO2": "0.000",
+    "totalBytes": 209
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.americanexpress.com",
+    "name": "AmericanExpress.com",
+    "industry": "Financial Services",
+    "isGreen": true,
+    "estimatedCO2": "0.216",
+    "totalBytes": 625057
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.twitter.com",
+    "name": "Twitter.com",
+    "industry": "Social Media",
+    "isGreen": false,
+    "estimatedCO2": "0.298",
+    "totalBytes": 745544
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.facebook.com",
+    "name": "Facebook.com",
+    "industry": "Social Media",
+    "isGreen": true,
+    "estimatedCO2": "0.105",
+    "totalBytes": 303036
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.instagram.com",
+    "name": "Instagram.com",
+    "industry": "Social Media",
+    "isGreen": true,
+    "estimatedCO2": "0.436",
+    "totalBytes": 1258895
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.linkedin.com",
+    "name": "LinkedIn.com",
+    "industry": "Social Media",
+    "isGreen": true,
+    "estimatedCO2": "0.027",
+    "totalBytes": 77092
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.pinterest.com",
+    "name": "Pinterest.com",
+    "industry": "Social Media",
+    "isGreen": false,
+    "estimatedCO2": "0.262",
+    "totalBytes": 653766
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.amazon.com",
+    "name": "Amazon.com",
+    "industry": "E-commerce",
+    "isGreen": true,
+    "estimatedCO2": "0.007",
+    "totalBytes": 21037
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.ebay.com",
+    "name": "eBay.com",
+    "industry": "E-commerce",
+    "isGreen": true,
+    "estimatedCO2": "0.171",
+    "totalBytes": 494516
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.walmart.com",
+    "name": "Walmart.com",
+    "industry": "E-commerce",
+    "isGreen": true,
+    "estimatedCO2": "0.307",
+    "totalBytes": 885598
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.target.com",
+    "name": "Target.com",
+    "industry": "E-commerce",
+    "isGreen": true,
+    "estimatedCO2": "0.552",
+    "totalBytes": 1593352
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.bestbuy.com",
+    "name": "BestBuy.com",
+    "industry": "E-commerce",
+    "isGreen": true,
+    "estimatedCO2": "0.545",
+    "totalBytes": 1573943
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.apple.com",
+    "name": "Apple.com",
+    "industry": "Technology",
+    "isGreen": true,
+    "estimatedCO2": "0.744",
+    "totalBytes": 2149395
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.microsoft.com",
+    "name": "Microsoft.com",
+    "industry": "Technology",
+    "isGreen": true,
+    "estimatedCO2": "0.299",
+    "totalBytes": 864010
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.google.com",
+    "name": "Google.com",
+    "industry": "Technology",
+    "isGreen": true,
+    "estimatedCO2": "0.192",
+    "totalBytes": 555421
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.ibm.com",
+    "name": "IBM.com",
+    "industry": "Technology",
+    "isGreen": true,
+    "estimatedCO2": "1.243",
+    "totalBytes": 3591574
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.oracle.com",
+    "name": "Oracle.com",
+    "industry": "Technology",
+    "isGreen": true,
+    "estimatedCO2": "0.297",
+    "totalBytes": 857447
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.netflix.com",
+    "name": "Netflix.com",
+    "industry": "Entertainment",
+    "isGreen": true,
+    "estimatedCO2": "0.886",
+    "totalBytes": 2559123
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.hulu.com",
+    "name": "Hulu.com",
+    "industry": "Entertainment",
+    "isGreen": true,
+    "estimatedCO2": "1.463",
+    "totalBytes": 4225402
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.disneyplus.com",
+    "name": "DisneyPlus.com",
+    "industry": "Entertainment",
+    "isGreen": true,
+    "estimatedCO2": "0.382",
+    "totalBytes": 1102593
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.hbo.com",
+    "name": "HBO.com",
+    "industry": "Entertainment",
+    "isGreen": true,
+    "estimatedCO2": "0.828",
+    "totalBytes": 2393106
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.sling.com",
+    "name": "Sling.com",
+    "industry": "Entertainment",
+    "isGreen": false,
+    "estimatedCO2": "0.146",
+    "totalBytes": 365295
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.ups.com",
+    "name": "UPS.com",
+    "industry": "Logistics",
+    "isGreen": true,
+    "estimatedCO2": "0.000",
+    "totalBytes": 63
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.fedex.com",
+    "name": "Fedex.com",
+    "industry": "Logistics",
+    "isGreen": true,
+    "estimatedCO2": "0.000",
+    "totalBytes": 0
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.usps.com",
+    "name": "USPS.com",
+    "industry": "Logistics",
+    "isGreen": false,
+    "estimatedCO2": "0.583",
+    "totalBytes": 1458295
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.dhl.com",
+    "name": "DHL.com",
+    "industry": "Logistics",
+    "isGreen": true,
+    "estimatedCO2": "0.000",
+    "totalBytes": 0
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.lasership.com",
+    "name": "LaserShip.com",
+    "industry": "Logistics",
+    "isGreen": true,
+    "estimatedCO2": "5.698",
+    "totalBytes": 16460934
   }
 ]
