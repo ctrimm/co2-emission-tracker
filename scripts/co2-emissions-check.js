@@ -40,6 +40,7 @@ function getCurrentDate() {
 // Check if a domain is hosted green
 async function checkGreenHosting(domain) {
   try {
+    console.log(`Checking green hosting for ${domain}`);
     const isGreen = await hosting.check(domain, "myGreenWebApp");
     console.log(`${domain} is green hosted: ${isGreen}`);
     return isGreen;
@@ -95,12 +96,13 @@ async function processDomains(filePath) {
 
   for (let domain of domains) {
     if (domain) {
-      const isGreen = await checkGreenHosting(domain);
-      const totalBytes = await getPageDataSize(`http://${domain}`);
+
+      const isGreen = await checkGreenHosting(domain.website);
+      const totalBytes = await getPageDataSize(`http://${domain.website}`);
       const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
       const record = {
         date: getCurrentDate(),
-        domain,
+        domain: domain.website,
         name: domain.name,
         industry: domain.industry,
         isGreen,
