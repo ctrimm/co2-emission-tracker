@@ -30,8 +30,10 @@ import emissionsResults from "public/data/emissions_results.json";
 
 const websiteData = emissionsResults.filter((result) => result.domain == website);
 
+
+console.log('troubleshooting websiteData - ', websiteData.length, websiteData);
 // iterate over the data and find the latest data
-const latestData = websiteData[websiteData.length - 1]
+const latestData = websiteData[websiteData.length - 1];
 
 // average grams per last 7 page loads for this website from the websiteData var
 const averageGramsPerLoad = websiteData.reduce((acc, cur) => acc + cur.estimatedCO2, 0) / websiteData.length;
