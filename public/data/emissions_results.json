@@ -194,5 +194,75 @@
     "isGreen": true,
     "estimatedCO2": "0.000",
     "totalBytes": 0
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.epa.gov",
+    "isGreen": false,
+    "estimatedCO2": "0.757",
+    "totalBytes": 1893188
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.recreation.gov",
+    "isGreen": false,
+    "estimatedCO2": "0.147",
+    "totalBytes": 366223
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.va.gov",
+    "isGreen": false,
+    "estimatedCO2": "0.727",
+    "totalBytes": 1816714
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.whitehouse.gov",
+    "isGreen": false,
+    "estimatedCO2": "0.198",
+    "totalBytes": 495544
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.dhs.gov",
+    "isGreen": true,
+    "estimatedCO2": "0.523",
+    "totalBytes": 1509876
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.irs.gov",
+    "isGreen": true,
+    "estimatedCO2": "0.791",
+    "totalBytes": 2284827
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.cdc.gov",
+    "isGreen": true,
+    "estimatedCO2": "0.876",
+    "totalBytes": 2529586
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.weather.gov",
+    "isGreen": true,
+    "estimatedCO2": "0.124",
+    "totalBytes": 359392
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.ssa.gov",
+    "isGreen": true,
+    "estimatedCO2": "0.143",
+    "totalBytes": 412723
+  },
+  {
+    "date": "26-2-2024",
+    "domain": "www.studentaid.gov",
+    "isGreen": true,
+    "estimatedCO2": "0.000",
+    "totalBytes": 0
   }
 ]
