@@ -19,6 +19,65 @@
     "name": "Whitehouse.gov",
     "industry": "Public Sector"
   },
+   {
+    "website": "www.dhs.gov",
+    "name": "DHS.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.irs.gov",
+    "name": "IRS.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.cdc.gov",
+    "name": "CDC.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.weather.gov",
+    "name": "Weather.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.ssa.gov",
+    "name": "SSA.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.studentaid.gov",
+    "name": "StudentAid.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.usa.gov",
+    "name": "USA.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.fema.gov",
+    "name": "FEMA.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.nps.gov",
+    "name": "NPS.gov",
+    "industry": "Public Sector"
+  }, {
+    "website": "www.usda.gov",
+    "name": "USDA.gov",
+    "industry": "Public Sector"
+  },
+  {
+    "website": "www.nist.gov",
+    "name": "NIST.gov",
+    "industry": "Public Sector"
+  },
+  {
+    "website": "www.uspto.gov",
+    "name": "USPTO.gov",
+    "industry": "Public Sector"
+  },
   {
     "website": "www.chase.com",
     "name": "Chase.com",
