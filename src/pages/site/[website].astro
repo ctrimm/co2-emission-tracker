@@ -29,7 +29,6 @@ import emissionsResults from "public/data/emissions_results.json";
 // iterate over emissions and find all the mataches on the website variable and store it in a variable
 
 const websiteData = emissionsResults.filter((result) => result.domain == website);
-console.log(websiteData);
 
 // iterate over the data and find the latest data
 const latestData = websiteData[websiteData.length - 1]
@@ -67,8 +66,8 @@ const trendCardInfo = [
     cardFooter: "~3 hours ago",
   },
   {
-    cardTitle: "Green Hosted?",
-    cardContent: "Yes",
+    cardTitle: "Industry",
+    cardContent: latestData.industry,
     cardFooter: "1 hour ago",
   },
   {
@@ -135,12 +134,12 @@ const data = [
         Viewing Results For
       </h5>
       <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
-        {website}
+        {latestData.name}
       </h2>
       <p
         class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
       >
-        Let's take a look at the carbon emissions data for {website}. It is updated nightly and is
+        Let's take a look at the carbon emissions data for <a href={website} class="underline text-gradient_sky-emerald" target="_blank" rel="noreferrer">{website}</a>. It is updated nightly and is
         available at the
         <a
           href={siteConfig.links.github}

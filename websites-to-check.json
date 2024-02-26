@@ -1,0 +1,172 @@
+[
+  {
+    "website": "www.epa.gov",
+    "name": "EPA.gov",
+    "industry": "Public Sector"
+  },
+  {
+    "website": "www.recreation.gov",
+    "name": "Recreation.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.va.gov",
+    "name": "VA.gov",
+    "industry": "Public Sector"
+  },
+   {
+    "website": "www.whitehouse.gov",
+    "name": "Whitehouse.gov",
+    "industry": "Public Sector"
+  },
+  {
+    "website": "www.chase.com",
+    "name": "Chase.com",
+    "industry": "Financial Services"
+  },
+  {
+    "website": "www.bankofamerica.com",
+    "name": "BankofAmerica.com",
+    "industry": "Financial Services"
+  },
+  {
+    "website": "www.wellsfargo.com",
+    "name": "WellsFargo.com",
+    "industry": "Financial Services"
+  },
+  {
+    "website": "www.citibank.com",
+    "name": "Citibank.com",
+    "industry": "Financial Services"
+  },
+  {
+    "website": "www.americanexpress.com",
+    "name": "AmericanExpress.com",
+    "industry": "Financial Services"
+  },
+  {
+    "website": "www.twitter.com",
+    "name": "Twitter.com",
+    "industry": "Social Media"
+  },
+  {
+    "website": "www.facebook.com",
+    "name": "Facebook.com",
+    "industry": "Social Media"
+  },
+  {
+    "website": "www.instagram.com",
+    "name": "Instagram.com",
+    "industry": "Social Media"
+  },
+  {
+    "website": "www.linkedin.com",
+    "name": "LinkedIn.com",
+    "industry": "Social Media"
+  },
+  {
+    "website": "www.pinterest.com",
+    "name": "Pinterest.com",
+    "industry": "Social Media"
+  },
+  {
+    "website": "www.amazon.com",
+    "name": "Amazon.com",
+    "industry": "E-commerce"
+  },
+  {
+    "website": "www.ebay.com",
+    "name": "eBay.com",
+    "industry": "E-commerce"
+  },
+  {
+    "website": "www.walmart.com",
+    "name": "Walmart.com",
+    "industry": "E-commerce"
+  },
+  {
+    "website": "www.target.com",
+    "name": "Target.com",
+    "industry": "E-commerce"
+  },
+  {
+    "website": "www.bestbuy.com",
+    "name": "BestBuy.com",
+    "industry": "E-commerce"
+  },
+  {
+    "website": "www.apple.com",
+    "name": "Apple.com",
+    "industry": "Technology"
+  },
+  {
+    "website": "www.microsoft.com",
+    "name": "Microsoft.com",
+    "industry": "Technology"
+  },
+  {
+    "website": "www.google.com",
+    "name": "Google.com",
+    "industry": "Technology"
+  },
+  {
+    "website": "www.ibm.com",
+    "name": "IBM.com",
+    "industry": "Technology"
+  },
+  {
+    "website": "www.oracle.com",
+    "name": "Oracle.com",
+    "industry": "Technology"
+  },
+  {
+    "website": "www.netflix.com",
+    "name": "Netflix.com",
+    "industry": "Entertainment"
+  },
+  {
+    "website": "www.hulu.com",
+    "name": "Hulu.com",
+    "industry": "Entertainment"
+  },
+  {
+    "website": "www.disneyplus.com",
+    "name": "DisneyPlus.com",
+    "industry": "Entertainment"
+  },
+  {
+    "website": "www.hbo.com",
+    "name": "HBO.com",
+    "industry": "Entertainment"
+  },
+  {
+    "website": "www.sling.com",
+    "name": "Sling.com",
+    "industry": "Entertainment"
+  },
+  {
+    "website": "www.ups.com",
+    "name": "UPS.com",
+    "industry": "Logistics"
+  },
+  {
+    "website": "www.fedex.com",
+    "name": "Fedex.com",
+    "industry": "Logistics"
+  },
+  {
+    "website": "www.usps.com",
+    "name": "USPS.com",
+    "industry": "Logistics"
+  },
+  {
+    "website": "www.dhl.com",
+    "name": "DHL.com",
+    "industry": "Logistics"
+  },
+  {
+    "website": "www.lasership.com",
+    "name": "LaserShip.com",
+    "industry": "Logistics"
+  }
+]

@@ -2,6 +2,8 @@
   {
     "date": "23-2-2024",
     "domain": "www.epa.gov",
+    "name": "EPA.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.732,
     "totalBytes": 1828669
@@ -9,6 +11,8 @@
   {
     "date": "23-2-2024",
     "domain": "www.recreation.gov",
+    "name": "Recreation.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.147,
     "totalBytes": 366201
@@ -16,6 +20,8 @@
   {
     "date": "23-2-2024",
     "domain": "www.va.gov",
+    "name": "VA.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.693,
     "totalBytes": 1731092
@@ -23,6 +29,8 @@
   {
     "date": "23-2-2024",
     "domain": "www.whitehouse.gov",
+    "name": "Whitehouse.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.209,
     "totalBytes": 522187
@@ -30,6 +38,8 @@
   {
     "date": "24-2-2024",
     "domain": "www.epa.gov",
+    "name": "EPA.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.757,
     "totalBytes": 1893281
@@ -37,6 +47,8 @@
   {
     "date": "24-2-2024",
     "domain": "www.recreation.gov",
+    "name": "Recreation.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.147,
     "totalBytes": 366348
@@ -44,6 +56,8 @@
   {
     "date": "24-2-2024",
     "domain": "www.va.gov",
+    "name": "VA.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.581,
     "totalBytes": 1451165
@@ -51,6 +65,8 @@
   {
     "date": "24-2-2024",
     "domain": "www.whitehouse.gov",
+    "name": "Whitehouse.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.168,
     "totalBytes": 419633
@@ -58,6 +74,8 @@
   {
     "date": "25-2-2024",
     "domain": "www.epa.gov",
+    "name": "EPA.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.757,
     "totalBytes": 1893356
@@ -65,6 +83,8 @@
   {
     "date": "25-2-2024",
     "domain": "www.recreation.gov",
+    "name": "Recreation.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.147,
     "totalBytes": 366225
@@ -72,6 +92,8 @@
   {
     "date": "25-2-2024",
     "domain": "www.va.gov",
+    "name": "VA.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.726,
     "totalBytes": 1815621
@@ -79,6 +101,8 @@
   {
     "date": "25-2-2024",
     "domain": "www.whitehouse.gov",
+    "name": "Whitehouse.gov",
+    "industry": "Public Sector",
     "isGreen": false,
     "estimatedCO2": 0.198,
     "totalBytes": 495541
@@ -86,6 +110,7 @@
   {
     "date": "25-2-2024",
     "domain": "www.dhs.gov",
+    "industry": "Public Sector",
     "isGreen": true,
     "estimatedCO2": 0.546,
     "totalBytes": 1576844
@@ -93,6 +118,7 @@
   {
     "date": "25-2-2024",
     "domain": "www.irs.gov",
+    "industry": "Public Sector",
     "isGreen": true,
     "estimatedCO2": 0.802,
     "totalBytes": 2317071
@@ -100,6 +126,7 @@
   {
     "date": "25-2-2024",
     "domain": "www.cdc.gov",
+    "industry": "Public Sector",
     "isGreen": true,
     "estimatedCO2": 0.871,
     "totalBytes": 2515460
@@ -107,6 +134,7 @@
   {
     "date": "25-2-2024",
     "domain": "www.weather.gov",
+    "industry": "Public Sector",
     "isGreen": true,
     "estimatedCO2": 0.241,
     "totalBytes": 695158
@@ -114,6 +142,7 @@
   {
     "date": "25-2-2024",
     "domain": "www.ssa.gov",
+    "industry": "Public Sector",
     "isGreen": true,
     "estimatedCO2": 0.143,
     "totalBytes": 412758
@@ -121,6 +150,7 @@
   {
     "date": "25-2-2024",
     "domain": "www.studentaid.gov",
+    "industry": "Public Sector",
     "isGreen": true,
     "estimatedCO2": 0.000,
     "totalBytes": 0
@@ -128,71 +158,84 @@
   {
     "date": "26-2-2024",
     "domain": "www.epa.gov",
+    "name": "EPA.gov",
+    "industry": "Public Sector",
     "isGreen": false,
-    "estimatedCO2": "0.757",
+    "estimatedCO2": 0.757,
     "totalBytes": 1893188
   },
   {
     "date": "26-2-2024",
     "domain": "www.recreation.gov",
+    "name": "Recreation.gov",
+    "industry": "Public Sector",
     "isGreen": false,
-    "estimatedCO2": "0.147",
+    "estimatedCO2": 0.147,
     "totalBytes": 366223
   },
   {
     "date": "26-2-2024",
     "domain": "www.va.gov",
+    "name": "VA.gov",
+    "industry": "Public Sector",
     "isGreen": false,
-    "estimatedCO2": "0.727",
+    "estimatedCO2": 0.727,
     "totalBytes": 1816714
   },
   {
     "date": "26-2-2024",
     "domain": "www.whitehouse.gov",
+    "name": "Whitehouse.gov",
+    "industry": "Public Sector",
     "isGreen": false,
-    "estimatedCO2": "0.198",
+    "estimatedCO2": 0.198,
     "totalBytes": 495544
   },
   {
     "date": "26-2-2024",
     "domain": "www.dhs.gov",
+    "industry": "Public Sector",
     "isGreen": true,
-    "estimatedCO2": "0.523",
+    "estimatedCO2": 0.523,
     "totalBytes": 1509876
   },
   {
     "date": "26-2-2024",
     "domain": "www.irs.gov",
+    "industry": "Public Sector",
     "isGreen": true,
-    "estimatedCO2": "0.791",
+    "estimatedCO2": 0.791,
     "totalBytes": 2284827
   },
   {
     "date": "26-2-2024",
     "domain": "www.cdc.gov",
+    "industry": "Public Sector",
     "isGreen": true,
-    "estimatedCO2": "0.876",
+    "estimatedCO2": 0.876,
     "totalBytes": 2529586
   },
   {
     "date": "26-2-2024",
     "domain": "www.weather.gov",
+    "industry": "Public Sector",
     "isGreen": true,
-    "estimatedCO2": "0.124",
+    "estimatedCO2": 0.124,
     "totalBytes": 359392
   },
   {
     "date": "26-2-2024",
     "domain": "www.ssa.gov",
+    "industry": "Public Sector",
     "isGreen": true,
-    "estimatedCO2": "0.143",
+    "estimatedCO2": 0.143,
     "totalBytes": 412723
   },
   {
     "date": "26-2-2024",
     "domain": "www.studentaid.gov",
     "isGreen": true,
-    "estimatedCO2": "0.000",
+    "estimatedCO2": 0.000,
     "totalBytes": 0
   }
 ]

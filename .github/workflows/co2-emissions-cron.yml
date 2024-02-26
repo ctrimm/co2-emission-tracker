@@ -33,7 +33,7 @@ jobs:
         run: mkdir -p ./data
 
       - name: Run CO2 Emissions Check
-        run: node scripts/co2-emissions-check.js websites-to-check.txt
+        run: node scripts/co2-emissions-check.js websites-to-check.json
 
       - name: Commit and push if there are changes
         run: |

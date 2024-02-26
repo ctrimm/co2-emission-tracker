@@ -80,15 +80,18 @@ function appendToJson(filePath, data) {
 
 // Process each domain from the file
 async function processDomains(filePath) {
-  const outputCSV = 'src/content/emissions_results.csv'; // Adjust this path as needed
+  const outputCSV = 'src/content/emissions_results.csv'; // Current output file path
 
   // Check if the CSV file exists; if not, create it with headers
   if (!existsSync(outputCSV)) {
-    writeFileSync(outputCSV, 'Date,Domain,IsGreen,EstimatedBytes,EstimatedCO2Grams\n', 'utf8');
+    writeFileSync(outputCSV, 'Date,Domain,Name,IsGreen,EstimatedBytes,EstimatedCO2Grams\n', 'utf8');
   }
 
-  const data = readFileSync(filePath, 'utf8');
-  const domains = data.split(/\r?\n/);
+  // Read / parse the JSON file
+  const domains = JSON.parse(readFileSync(filePath, 'utf8'));
+
+  // const data = readFileSync(filePath, 'utf8');
+  // const domains = data.split(/\r?\n/);
 
   for (let domain of domains) {
     if (domain) {
@@ -98,6 +101,8 @@ async function processDomains(filePath) {
       const record = {
         date: getCurrentDate(),
         domain,
+        name: domain.name,
+        industry: domain.industry,
         isGreen,
         estimatedCO2,
         totalBytes
@@ -111,7 +116,7 @@ async function processDomains(filePath) {
 // File path should be passed as a command-line argument
 const filePath = process.argv[2];
 if (!filePath) {
-  console.error('Please provide a file path containing URLs');
+  console.error('Please provide a file path containing the JSON blob of domains to check.');
   process.exit(1);
 }
 
