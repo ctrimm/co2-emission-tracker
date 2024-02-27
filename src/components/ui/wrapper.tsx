@@ -50,7 +50,7 @@ interface WrapperProps {
 
 interface AreaWrapperProps {
   "client:load": boolean;
-  "data": { name: string; uv: number; pv: number; amt: number; }[]
+  "data": {name: string; co2: number; industryAverageCo2: number;}[]
 }
 
 const TableWrapper = (props: WrapperProps) => {
@@ -76,7 +76,7 @@ const AreaChartWrapper = (props: AreaWrapperProps) => {
           }}
         >
           <defs>
-            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="colorco2" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
               <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
             </linearGradient>
@@ -86,11 +86,11 @@ const AreaChartWrapper = (props: AreaWrapperProps) => {
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
-          <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
-          <Area type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+          <Area type="monotone" dataKey="co2" stroke="#8884d8" fill="#8884d8" />
+          <Area type="monotone" dataKey="industryAverageCo2" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
         </AreaChart>
       </ResponsiveContainer>
     </div>

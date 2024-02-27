@@ -96,7 +96,7 @@ export const columns: ColumnDef<Emission>[] = [
       )
     },
     cell: ({ row }) => {
-      return <div className="text-center">{row.getValue("estimatedCO2")}</div>
+      return <div className="text-center">{(row.getValue("estimatedCO2") !== 0) ? row.getValue("estimatedCO2") : '-'}</div>
     }
   },
   {
