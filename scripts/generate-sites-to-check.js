@@ -26,11 +26,14 @@ function appendToJson(filePath, data) {
     jsonData = existingData ? JSON.parse(existingData) : [];
   }
 
-  // Add the new data
-  jsonData.push(data);
+  // Check if the domain/data already exists in the sites_to_check JSON file
+  if (!jsonData.includes(data)) {
+    // Add the new data
+    jsonData.push(data);
 
-  // Write the updated data back to the JSON file
-  writeFileSync(filePath, JSON.stringify(jsonData, null, 2), 'utf8');
+    // Write the updated data back to the JSON file
+    writeFileSync(filePath, JSON.stringify(jsonData, null, 2), 'utf8');
+  }
 }
 
 // File path should be passed as a command-line argument
