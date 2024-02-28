@@ -1,0 +1,32 @@
+[
+  {
+    "url": "http://36thdistrictcourtmi.gov",
+    "type": "Timeout or navigation error",
+    "error": "{}"
+  },
+  {
+    "url": "http://59dcmi.gov",
+    "type": "Timeout or navigation error",
+    "error": "{}"
+  },
+  {
+    "url": "http://abingtonma.gov",
+    "type": "Timeout or navigation error",
+    "error": "{}"
+  },
+  {
+    "url": "http://abitaspringsla.gov",
+    "type": "Timeout or navigation error",
+    "error": "{}"
+  },
+  {
+    "url": "http://www.bestbuy.com",
+    "type": "Timeout or navigation error",
+    "error": "{\"name\":\"TimeoutError\"}"
+  },
+  {
+    "url": "http://www.dhl.com",
+    "type": "Timeout or navigation error",
+    "error": "{}"
+  }
+]
