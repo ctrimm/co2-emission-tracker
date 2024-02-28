@@ -94,30 +94,36 @@ async function processDomains(filePath) {
   // Read / parse the JSON file
   const domains = JSON.parse(readFileSync(filePath, 'utf8'));
 
-  // const data = readFileSync(filePath, 'utf8');
-  // const domains = data.split(/\r?\n/);
+  const chunkSize = 20;
+  for (let i = 0; i < domains.length; i += chunkSize) {
+    const chunk = domains.slice(i, i + chunkSize);
+    const promises = chunk.map(async (domain) => {
+      try {
+        const isGreen = await checkGreenHosting(domain.website);
+        const totalBytes = await getPageDataSize(`http://${domain.website}`);
+        const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
+        const record = {
+          date: getCurrentDate(),
+          domain: domain.website,
+          name: domain.name,
+          industry: domain.industry,
+          domainType: domain.domainType || '',
+          agency: domain.agency || '',
+          organization: domain.organization || '',
+          isGreen,
+          estimatedCO2,
+          totalBytes
+        };
+        appendToCSV(outputCSV, record);
+        appendToJson(jsonOutputPath, record);
+      } catch (error) {
+        console.error(`Error processing domain ${domain.website}: ${error}`);
+        logErrorToFile(errorLogPath, domain.website, error);
+      }
+    });
 
-  for (let domain of domains) {
-    if (domain) {
-      const isGreen = await checkGreenHosting(domain.website);
-      const totalBytes = await getPageDataSize(`http://${domain.website}`);
-      const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
-      const record = {
-        date: getCurrentDate(),
-        domain: domain.website,
-        name: domain.name,
-        industry: domain.industry,
-        domainType: domain.domainType || '',
-        agency: domain.agency || '',
-        organization: domain.organization || '',
-        isGreen,
-        estimatedCO2,
-        totalBytes
-      };
-
-      appendToCSV(outputCSV, record);
-      appendToJson(jsonEmissionsOutputPath, record);
-    }
+    // Wait for all promises in the chunk to resolve
+    await Promise.all(promises);
   }
 }
 
