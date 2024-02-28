@@ -5,28 +5,9 @@ import puppeteer from 'puppeteer';
 // Initialize the CO2 estimation library
 const co2Emission = new co2();
 
-// Define the path for the JSON file
-const jsonOutputPath = './public/data/emissions_results.json';
-
-const errorLogPath = './public/data/error_log.json';
-
-// Function to log errors to a file
-function logErrorToFile(filePath, domain, error) {
-  let errorLog = [];
-
-  // Check if the error log file already exists and has content
-  if (existsSync(filePath)) {
-    // Read the current data and parse it
-    const existingData = readFileSync(filePath, 'utf8');
-    errorLog = existingData ? JSON.parse(existingData) : [];
-  }
-
-  // Add the new error
-  errorLog.push({ domain, error: JSON.stringify(error) });
-
-  // Write the updated error log back to the file
-  writeFileSync(filePath, JSON.stringify(errorLog, null, 2), 'utf8');
-}
+// Define the path for the JSON files
+const jsonEmissionsOutputPath = './public/data/emissions_results.json';
+const jsonErrorLogPath = './public/data/error_log.json';
 
 // Function to get page size
 async function getPageDataSize(url) {
@@ -44,6 +25,7 @@ async function getPageDataSize(url) {
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
   } catch (error) {
+    appendToJson(jsonErrorLogPath, { domain, type: 'Timeout or navigation error', error: JSON.stringify(error) });
     console.error(`Timeout or navigation error: ${error}`);
   }
 
@@ -64,6 +46,8 @@ async function checkGreenHosting(domain) {
     const result = await hosting.check(domain, "myGreenWebApp");
     return result;
   } catch (error) {
+    // Log the error to a file
+    appendToJson(jsonErrorLogPath, { domain,  type: 'Error Checking Green Hosting', error: JSON.stringify(error) });
     console.error(`Error checking green hosting for ${domain}: ${error}`);
     return false;
   }
@@ -114,30 +98,25 @@ async function processDomains(filePath) {
   // const domains = data.split(/\r?\n/);
 
   for (let domain of domains) {
-    try {
-      if (domain) {
-        const isGreen = await checkGreenHosting(domain.website);
-        const totalBytes = await getPageDataSize(`http://${domain.website}`);
-        const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
-        const record = {
-          date: getCurrentDate(),
-          domain: domain.website,
-          name: domain.name,
-          industry: domain.industry,
-          domainType: domain.domainType || '',
-          agency: domain.agency || '',
-          organization: domain.organization || '',
-          isGreen,
-          estimatedCO2,
-          totalBytes
-        };
+    if (domain) {
+      const isGreen = await checkGreenHosting(domain.website);
+      const totalBytes = await getPageDataSize(`http://${domain.website}`);
+      const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
+      const record = {
+        date: getCurrentDate(),
+        domain: domain.website,
+        name: domain.name,
+        industry: domain.industry,
+        domainType: domain.domainType || '',
+        agency: domain.agency || '',
+        organization: domain.organization || '',
+        isGreen,
+        estimatedCO2,
+        totalBytes
+      };
 
-        appendToCSV(outputCSV, record);
-        appendToJson(jsonOutputPath, record);
-      }
-    } catch (error) {
-      console.error(`ERROR PROCESSING DOMAIN: ${domain.website}: ${error}`);
-      logErrorToFile(errorLogPath, domain.website, error);
+      appendToCSV(outputCSV, record);
+      appendToJson(jsonEmissionsOutputPath, record);
     }
   }
 }
