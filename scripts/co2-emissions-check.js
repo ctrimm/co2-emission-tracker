@@ -25,7 +25,7 @@ async function getPageDataSize(url) {
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
   } catch (error) {
-    appendToJson(jsonErrorLogPath, { domain, type: 'Timeout or navigation error', error: JSON.stringify(error) });
+    appendToJson(jsonErrorLogPath, { url, type: 'Timeout or navigation error', error: JSON.stringify(error) });
     console.error(`Timeout or navigation error: ${error}`);
   }
 
