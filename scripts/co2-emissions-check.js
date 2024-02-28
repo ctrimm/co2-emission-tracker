@@ -12,25 +12,28 @@ const jsonErrorLogPath = './public/data/error_log.json';
 // Function to get page size
 async function getPageDataSize(url) {
   const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-  let totalBytes = 0;
-
-  page.on('response', async (response) => {
-    const headers = response.headers();
-    if (headers['content-length']) {
-      totalBytes += parseInt(headers['content-length'], 10);
-    }
-  });
-
   try {
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
-  } catch (error) {
-    appendToJson(jsonErrorLogPath, { url, type: 'Timeout or navigation error', error: JSON.stringify(error) });
-    // console.error(`Timeout or navigation error: ${error}`);
-  }
+    const page = await browser.newPage();
+    let totalBytes = 0;
 
-  await browser.close();
-  return totalBytes;
+    page.on('response', async (response) => {
+      const headers = response.headers();
+      if (headers['content-length']) {
+        totalBytes += parseInt(headers['content-length'], 10);
+      }
+    });
+
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    return totalBytes;
+  } catch (error) {
+    // Here, you handle the error, e.g., logging or appending it to a file
+    appendToJson(jsonErrorLogPath, { url, type: 'Timeout or navigation error', error: JSON.stringify(error) });
+    // It's important to rethrow the error if you want the calling function to be aware of it
+    throw error;
+  } finally {
+    // This block executes regardless of whether an exception occurred or not
+    await browser.close();
+  }
 }
 
 // Gets the current date in DD-MM-YYYY format
@@ -94,7 +97,7 @@ async function processDomains(filePath) {
   // Read / parse the JSON file
   const domains = JSON.parse(readFileSync(filePath, 'utf8'));
 
-  const chunkSize = 20;
+  const chunkSize = 10;
   for (let i = 0; i < domains.length; i += chunkSize) {
     const chunk = domains.slice(i, i + chunkSize);
     const promises = chunk.map(async (domain) => {
@@ -115,10 +118,10 @@ async function processDomains(filePath) {
           totalBytes
         };
         appendToCSV(outputCSV, record);
-        appendToJson(jsonOutputPath, record);
+        appendToJson(jsonEmissionsOutputPath, record);
       } catch (error) {
         console.error(`Error processing domain ${domain.website}: ${error}`);
-        jsonErrorLogPath(errorLogPath, domain.website, error);
+        appendToJson(jsonErrorLogPath, domain.website, error);
       }
     });
 
