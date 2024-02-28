@@ -12,6 +12,7 @@ const co2Emission = new co2();
 // Define the path for the JSON files
 const jsonEmissionsOutputPath = './public/data/emissions_results.json';
 const jsonErrorLogPath = './public/data/error_log.json';
+const outputCSV = 'src/content/emissions_results.csv';
 
 // Function to get page size
 async function getPageDataSize(url) {
@@ -92,8 +93,6 @@ function appendToJson(filePath, data) {
 
 // Process each domain from the file
 async function processDomains(filePath) {
-  const outputCSV = 'src/content/emissions_results.csv'; // Current output file path
-
   // Check if the CSV file exists; if not, create it with headers
   if (!existsSync(outputCSV)) {
     writeFileSync(outputCSV, 'Date,Domain,Name,IsGreen,EstimatedBytes,EstimatedCO2Grams\n', 'utf8');
