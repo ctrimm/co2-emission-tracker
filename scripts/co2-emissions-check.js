@@ -28,11 +28,9 @@ function logErrorToFile(filePath, domain, error) {
   writeFileSync(filePath, JSON.stringify(errorLog, null, 2), 'utf8');
 }
 
-// Launch a new headless browser instance one time
-const browser = await puppeteer.launch({ headless: true });
-
 // Function to get page size
 async function getPageDataSize(url) {
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   let totalBytes = 0;
 
