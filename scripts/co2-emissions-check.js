@@ -1,6 +1,10 @@
 import { appendFileSync, existsSync, writeFileSync, readFileSync } from 'fs';
 import { hosting, co2 } from '@tgwf/co2';
 import puppeteer from 'puppeteer';
+import pLimit from 'p-limit';
+
+// Limit the number of concurrent domain processing operations
+const limit = pLimit(10); // Assuming you want to have 10 operations in parallel at most
 
 // Initialize the CO2 estimation library
 const co2Emission = new co2();
@@ -97,37 +101,39 @@ async function processDomains(filePath) {
 
   // Read / parse the JSON file
   const domains = JSON.parse(readFileSync(filePath, 'utf8'));
+  const promises = [];
 
-  const chunkSize = 10;
-  for (let i = 0; i < domains.length; i += chunkSize) {
-    const chunk = domains.slice(i, i + chunkSize);
-    const promises = chunk.map(async (domain) => {
-      try {
-        const isGreen = await checkGreenHosting(domain.website);
-        const totalBytes = await getPageDataSize(`http://${domain.website}`);
-        const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
-        const record = {
-          date: getCurrentDate(),
-          domain: domain.website,
-          name: domain.name,
-          industry: domain.industry,
-          domainType: domain.domainType || '',
-          agency: domain.agency || '',
-          organization: domain.organization || '',
-          isGreen,
-          estimatedCO2,
-          totalBytes
-        };
-        appendToCSV(outputCSV, record);
-        appendToJson(jsonEmissionsOutputPath, record);
-      } catch (error) {
-        console.error(`Error processing domain ${domain.website}: ${error}`);
-        appendToJson(jsonErrorLogPath, domain.website, error);
-      }
-    });
+  for (const domain of domains) {
+    const promise = limit(() => processDomain(domain)); // processDomain would be an async function handling the processing for a single domain
+    promises.push(promise);
+  }
 
-    // Wait for all promises in the chunk to resolve
-    await Promise.all(promises);
+  // Wait for all the promises to resolve
+  await Promise.all(promises);
+}
+
+async function processDomain(domain) {
+  try {
+    const isGreen = await checkGreenHosting(domain.website);
+    const totalBytes = await getPageDataSize(`http://${domain.website}`);
+    const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
+    const record = {
+      date: getCurrentDate(),
+      domain: domain.website,
+      name: domain.name,
+      industry: domain.industry,
+      domainType: domain.domainType || '',
+      agency: domain.agency || '',
+      organization: domain.organization || '',
+      isGreen,
+      estimatedCO2,
+      totalBytes
+    };
+    appendToCSV(outputCSV, record);
+    appendToJson(jsonEmissionsOutputPath, record);
+  } catch (error) {
+    console.error(`Error processing domain ${domain.website}: ${error}`);
+    appendToJson(jsonErrorLogPath, domain.website, error);
   }
 }
 
