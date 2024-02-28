@@ -1,7 +1,5 @@
 "use client"
 
-import * as React from "react"
-
 import { columns, type Emission } from "../emission/columns"
 import { DataTable } from "./data-table"
 
@@ -55,7 +53,7 @@ interface AreaWrapperProps {
 
 const TableWrapper = (props: WrapperProps) => {
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-4">
       <DataTable columns={columns} data={data} />
     </div>
   );

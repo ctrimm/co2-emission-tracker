@@ -41,9 +41,9 @@ function getCurrentDate() {
 async function checkGreenHosting(domain) {
   try {
     console.log(`Checking green hosting for ${domain}`);
-    const isGreen = await hosting.check(domain, "myGreenWebApp");
-    console.log(`${domain} is green hosted: ${isGreen}`);
-    return isGreen;
+    hosting.check(domain, "myGreenWebApp").then((result) => {
+      return result;
+    });
   } catch (error) {
     console.error(`Error checking green hosting for ${domain}: ${error}`);
     return false;

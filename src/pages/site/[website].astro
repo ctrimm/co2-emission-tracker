@@ -27,7 +27,6 @@ const { website } = Astro.params;
 import emissionsResults from "public/data/emissions_results.json";
 
 // iterate over emissions and find all the mataches on the website variable and store it in a variable
-
 const websiteData = emissionsResults.filter((result) => result.domain == website);
 
 // iterate over the data and find the latest data
@@ -35,6 +34,10 @@ const latestData = websiteData[websiteData.length - 1];
 
 // average grams per last 7 page loads for this website from the websiteData var
 const averageGramsPerLoad = websiteData.reduce((acc, cur) => acc + cur.estimatedCO2, 0) / websiteData.length;
+
+// average Megabytes per last 7 page loads for this website from the websiteData var
+const averageBytesPerLoad = websiteData.reduce((acc, cur) => acc + cur.totalBytes, 0) / websiteData.length;
+const averageMBPerLoad = averageBytesPerLoad / 1048576;
 
 // TO-DO << Fix this when people run on their own schedule
 // Calculate time since last index time (assuming all runs are at midnigth)
@@ -51,34 +54,6 @@ const pageViews = 1_000_000; // 1 million page views
 const totalCo2Emissions = websiteData.reduce((acc, cur) => acc + cur.estimatedCO2, 0);
 const averageCo2Emissions = totalCo2Emissions / websiteData.length;
 const cupsOfCoffee = (averageCo2Emissions / co2EmissionsPerCupOfCoffee) * (pageViews);
-
-const latestCardInformation = [
-  {
-    cardTitle: "Total Times Indexed",
-    cardContent: websiteData.length,
-    cardFooter: timeSinceMidnight,
-  },
-  {
-    cardTitle: "Green Hosted?",
-    cardContent: latestData.isGreen ? 'YES' : 'NO',
-    // conditional class for green / red depending on latestData.isGreen
-    cardClass: cn({
-      'text-gradient_sky-emerald': latestData.isGreen,
-      'text-gradient_orange-red': !latestData.isGreen,
-    }),
-    cardFooter: "1 hour ago",
-  },
-  {
-    cardTitle: "Last 7 Page Loads",
-    cardContent: `${averageGramsPerLoad.toFixed(3)} g`,
-    cardFooter: "avg. per load",
-  },
-  {
-    cardTitle: "# of Coffees",
-    cardContent: cupsOfCoffee.toFixed(0),
-    cardFooter: "for every 1M Visitors",
-  },
-];
 
 // Filter the emissionsResults array to include only the results for the same industry
 const industryResults = emissionsResults.filter((result) => result.industry == latestData.industry);
@@ -101,7 +76,35 @@ const trend = latestData.estimatedCO2 - averageGramsPerLoad;
 const trendArrow = trend > 5 ? '↑' : trend < -5 ? '↓' : '--';
 const trendSubText = trend > 5 ? 'up' : trend < -5 ? 'down' : 'relatively flat';
 
-const trendCardInfo = [
+
+const topOfGraphInfoForCards = [
+  {
+    cardTitle: "Industry",
+    cardContent: latestData.industry,
+  },
+  {
+    cardTitle: "Total Times Indexed",
+    cardContent: websiteData.length,
+    cardFooter: timeSinceMidnight,
+  },
+  {
+    cardTitle: "Green Hosted?",
+    cardContent: latestData.isGreen ? 'YES' : 'NO',
+    // conditional class for green / red depending on latestData.isGreen
+    cardClass: cn({
+      'text-gradient_sky-emerald': latestData.isGreen,
+      'text-gradient_orange-red': !latestData.isGreen,
+    }),
+    cardFooter: "1 hour ago",
+  },
+  {
+    cardTitle: `Average of Last ${websiteData.length} Page Loads`,
+    cardContent: `${averageGramsPerLoad.toFixed(3)} g`,
+    cardFooter: "of CO2 emission per page load",
+  },
+];
+
+const bottomOfGraphInfoForCards = [
   {
     cardTitle: "Emissions Trending",
     // Display cardContent that says whether or not the emissions are trending up, down, or flat
@@ -109,11 +112,12 @@ const trendCardInfo = [
     cardFooter: trendSubText,
   },
   {
-    cardTitle: "Industry",
-    cardContent: latestData.industry,
+    cardTitle: "Per Page Load",
+    cardContent: `${(averageMBPerLoad).toFixed(2)} MB`,
+    cardFooter: "on average",
   },
   {
-    cardTitle: "Compared to Others In Same Industry",
+    cardTitle: "Compared to Industry Avg.",
     // Display cardContent that is a % difference from the industry average
     cardContent: `${gramsPerLoadvIndustryDiff}% ${gramsPerLoadvIndustryArrow}`,
     cardClass: cn({
@@ -121,6 +125,11 @@ const trendCardInfo = [
       'text-gradient_orange-red': Number(gramsPerLoadvIndustryDiff) >= 0,
     }),
     cardFooter: "from industry avg.",
+  },
+  {
+    cardTitle: "# of Coffees",
+    cardContent: cupsOfCoffee.toFixed(0),
+    cardFooter: "for every 1M Visitors",
   },
 ];
 
@@ -157,13 +166,13 @@ console.log('data - ', data);
       <p
         class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
       >
-        Let's take a look at the carbon emissions data for <a href={website} class="underline text-gradient_sky-emerald" target="_blank" rel="noreferrer">{website}</a>. It is updated nightly and is
+        Let's take a look at the carbon emissions data for <a href={website} class="underline text-gradient_sky-emerald hover:decoration-emerald-500 underline underline-offset-4" target="_blank" rel="noreferrer">{website}</a>. It is updated nightly and is
         available at the
         <a
           href={siteConfig.links.github}
           target="_blank"
           rel="noreferrer"
-          class="underline underline-offset-4"
+          class="decoration-emerald-500 underline underline-offset-4"
         >
           GitHub repo</a>.
       </p>
@@ -177,14 +186,14 @@ console.log('data - ', data);
     </div>
     <!-- Individual Cards For Top-Level Metrics -->
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 py-4">
-      {latestCardInformation.map((card) => (
+      {topOfGraphInfoForCards.map((card) => (
         <Card>
           <CardHeader>
             <CardTitle className="tracking-tight text-sm font-medium text-center">{card.cardTitle}</CardTitle>
             {card.cardDescription ? <CardDescription>{(card.cardDescription)}</CardDescription> : ''}
           </CardHeader>
           <CardContent className={card.cardClass}>
-            <p class="text-6xl font-bold text-center">{card.cardContent}</p>
+            <p class={`font-bold text-center ${card.cardTitle.length < 10 ? 'text-5xl' : 'text-6xl'}`}>{card.cardContent}</p>
           </CardContent>
           <CardFooter>
             <p class="m-auto text-xs text-muted-foreground text-center">{card.cardFooter}</p>
@@ -202,8 +211,8 @@ console.log('data - ', data);
       </CardContent>
     </Card>
     <!-- Trending Cards -->
-    <div class="grid gap-4 lg:grid-cols-3 py-4">
-      {trendCardInfo.map((card) => (
+    <div class="grid gap-4 lg:grid-cols-4 py-4">
+      {bottomOfGraphInfoForCards.map((card) => (
         <Card>
           <CardHeader>
             <CardTitle className="tracking-tight text-sm font-medium text-center">{card.cardTitle}</CardTitle>
@@ -236,7 +245,7 @@ console.log('data - ', data);
           href={siteConfig.links.github}
           target="_blank"
           rel="noreferrer"
-          class="underline underline-offset-4"
+          class="underline underline-offset-4 decoration-emerald-500"
         >
           GitHub</a>.
       </p>

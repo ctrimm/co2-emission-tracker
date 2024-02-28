@@ -202,7 +202,7 @@
     "domain": "www.chase.com",
     "name": "Chase.com",
     "industry": "Financial Services",
-    "isGreen": true,
+    "isGreen": false,
     "estimatedCO2": 0.188,
     "totalBytes": 543638
   },
@@ -616,7 +616,7 @@
     "domain": "www.chase.com",
     "name": "Chase.com",
     "industry": "Financial Services",
-    "isGreen": true,
+    "isGreen": false,
     "estimatedCO2": 0.194,
     "totalBytes": 559919
   },
