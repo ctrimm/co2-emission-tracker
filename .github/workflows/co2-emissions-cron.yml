@@ -34,6 +34,9 @@ jobs:
 
       - name: Run CO2 Emissions Check
         run: node scripts/co2-emissions-check.js websites-to-check.json
+      
+      - name: Generate sites_to_check.json file
+        run: node scripts/generate-sites-to-check.js websites-to-check.json
 
       - name: Commit and push if there are changes
         run: |
@@ -44,7 +47,8 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git add src/content/emissions_results.csv
             git add public/data/emissions_results.json
-            git commit -m "Update emissions data"
+            git add public/data/sites_to_check.json
+            git commit -m "Update emissions & sites to check data"
             git push
           else
             echo "No changes to commit"
