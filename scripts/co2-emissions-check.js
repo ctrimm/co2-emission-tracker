@@ -23,7 +23,8 @@ async function getPageDataSize(url) {
       }
     });
 
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    // Timeout is set to 10 seconds
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 10000 });
     return totalBytes;
   } catch (error) {
     // Here, you handle the error, e.g., logging or appending it to a file
