@@ -132,7 +132,7 @@ async function processDomain(domain) {
     appendToJson(jsonEmissionsOutputPath, record);
   } catch (error) {
     console.error(`Error processing domain ${domain.website}: ${error}`);
-    appendToJson(jsonErrorLogPath, domain.website, error);
+    appendToJson(jsonErrorLogPath, {url: domain.website, error: JSON.stringify(error)});
   }
 }
 

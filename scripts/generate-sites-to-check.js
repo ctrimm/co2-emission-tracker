@@ -1,7 +1,8 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 
-// Define the path for the JSON file
+// Define the path for the JSON files
 const jsonOutputPath = './public/data/sites_to_check.json';
+const jsonErrorLogPath = './public/data/error_log.json';
 
 // Function to generate sites to check
 function generateSitesToCheck(filePath) {
@@ -15,8 +16,8 @@ function generateSitesToCheck(filePath) {
   }
 }
 
-// Function to add data to the JSON file
-function appendToJson(filePath, data) {
+// Function to add domain to the JSON file
+function appendToJson(filePath, domain) {
   let jsonData = [];
 
   // Check if the JSON file already exists and has content
@@ -26,8 +27,20 @@ function appendToJson(filePath, data) {
     jsonData = existingData ? JSON.parse(existingData) : [];
   }
 
-  // Check if the domain/data already exists in the sites_to_check JSON file
-  if (!jsonData.includes(data)) {
+  // Check if the domain already exists in the sites_to_check JSON file
+  if (!jsonData.includes(domain)) {
+    // Check if the data exists in the error_log JSON file
+    if (existsSync(jsonErrorLogPath)) {
+      const errorLogData = readFileSync(jsonErrorLogPath, 'utf8');
+      const errorLogJsonData = errorLogData ? JSON.parse(errorLogData) : [];
+
+      // Check if the URL exists in the error log
+      if (errorLogJsonData.some(errorLogEntry => errorLogEntry.url === domain)) {
+        // If the domain/data exists in the error_log, do not add it to the sites_to_check
+        return;
+      }
+    }
+
     // Add the new data
     jsonData.push(data);
 
