@@ -26,7 +26,7 @@ async function getPageDataSize(url) {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
   } catch (error) {
     appendToJson(jsonErrorLogPath, { url, type: 'Timeout or navigation error', error: JSON.stringify(error) });
-    console.error(`Timeout or navigation error: ${error}`);
+    // console.error(`Timeout or navigation error: ${error}`);
   }
 
   await browser.close();
@@ -48,7 +48,7 @@ async function checkGreenHosting(domain) {
   } catch (error) {
     // Log the error to a file
     appendToJson(jsonErrorLogPath, { domain,  type: 'Error Checking Green Hosting', error: JSON.stringify(error) });
-    console.error(`Error checking green hosting for ${domain}: ${error}`);
+    // console.error(`Error checking green hosting for ${domain}: ${error}`);
     return false;
   }
 }
@@ -118,7 +118,7 @@ async function processDomains(filePath) {
         appendToJson(jsonOutputPath, record);
       } catch (error) {
         console.error(`Error processing domain ${domain.website}: ${error}`);
-        logErrorToFile(errorLogPath, domain.website, error);
+        jsonErrorLogPath(errorLogPath, domain.website, error);
       }
     });
 
