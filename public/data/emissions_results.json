@@ -880,5 +880,381 @@
     "isGreen": true,
     "estimatedCO2": 5.698,
     "totalBytes": 16462054
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.epa.gov",
+    "name": "EPA.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.758,
+    "totalBytes": 1895228
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.recreation.gov",
+    "name": "Recreation.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.147,
+    "totalBytes": 367096
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.va.gov",
+    "name": "VA.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.71,
+    "totalBytes": 1775509
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.whitehouse.gov",
+    "name": "Whitehouse.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.199,
+    "totalBytes": 496295
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.dhs.gov",
+    "name": "DHS.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.65,
+    "totalBytes": 1623511
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.irs.gov",
+    "name": "IRS.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.856,
+    "totalBytes": 2138454
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.cdc.gov",
+    "name": "CDC.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.954,
+    "totalBytes": 2384903
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.weather.gov",
+    "name": "Weather.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.144,
+    "totalBytes": 360607
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.ssa.gov",
+    "name": "SSA.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.11,
+    "totalBytes": 275293
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.studentaid.gov",
+    "name": "StudentAid.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0,
+    "totalBytes": 0
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.usa.gov",
+    "name": "USA.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.143,
+    "totalBytes": 357466
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.fema.gov",
+    "name": "FEMA.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.725,
+    "totalBytes": 1812711
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.nps.gov",
+    "name": "NPS.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.237,
+    "totalBytes": 593475
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.usda.gov",
+    "name": "USDA.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.342,
+    "totalBytes": 855644
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.nist.gov",
+    "name": "NIST.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.28,
+    "totalBytes": 699023
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.uspto.gov",
+    "name": "USPTO.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 0.579,
+    "totalBytes": 1446746
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.get.gov",
+    "name": "get.gov",
+    "industry": "Public Sector",
+    "estimatedCO2": 1.629,
+    "totalBytes": 4072253
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.chase.com",
+    "name": "Chase.com",
+    "industry": "Financial Services",
+    "estimatedCO2": 0.216,
+    "totalBytes": 540669
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.bankofamerica.com",
+    "name": "BankofAmerica.com",
+    "industry": "Financial Services",
+    "estimatedCO2": 0.057,
+    "totalBytes": 141999
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.wellsfargo.com",
+    "name": "WellsFargo.com",
+    "industry": "Financial Services",
+    "estimatedCO2": 0.208,
+    "totalBytes": 520232
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.citibank.com",
+    "name": "Citibank.com",
+    "industry": "Financial Services",
+    "estimatedCO2": 0,
+    "totalBytes": 209
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.americanexpress.com",
+    "name": "AmericanExpress.com",
+    "industry": "Financial Services",
+    "estimatedCO2": 0.252,
+    "totalBytes": 630945
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.twitter.com",
+    "name": "Twitter.com",
+    "industry": "Social Media",
+    "estimatedCO2": 0.3,
+    "totalBytes": 748886
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.facebook.com",
+    "name": "Facebook.com",
+    "industry": "Social Media",
+    "estimatedCO2": 0.061,
+    "totalBytes": 151259
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.instagram.com",
+    "name": "Instagram.com",
+    "industry": "Social Media",
+    "estimatedCO2": 0.504,
+    "totalBytes": 1258684
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.linkedin.com",
+    "name": "LinkedIn.com",
+    "industry": "Social Media",
+    "estimatedCO2": 0.006,
+    "totalBytes": 15092
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.pinterest.com",
+    "name": "Pinterest.com",
+    "industry": "Social Media",
+    "estimatedCO2": 0.262,
+    "totalBytes": 654233
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.amazon.com",
+    "name": "Amazon.com",
+    "industry": "E-commerce",
+    "estimatedCO2": 0.002,
+    "totalBytes": 5899
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.ebay.com",
+    "name": "eBay.com",
+    "industry": "E-commerce",
+    "estimatedCO2": 0.183,
+    "totalBytes": 456309
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.walmart.com",
+    "name": "Walmart.com",
+    "industry": "E-commerce",
+    "estimatedCO2": 0.345,
+    "totalBytes": 863263
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.target.com",
+    "name": "Target.com",
+    "industry": "E-commerce",
+    "estimatedCO2": 0.637,
+    "totalBytes": 1592923
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.bestbuy.com",
+    "name": "BestBuy.com",
+    "industry": "E-commerce",
+    "estimatedCO2": 0.283,
+    "totalBytes": 707797
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.apple.com",
+    "name": "Apple.com",
+    "industry": "Technology",
+    "estimatedCO2": 0.558,
+    "totalBytes": 1395526
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.microsoft.com",
+    "name": "Microsoft.com",
+    "industry": "Technology",
+    "estimatedCO2": 0.353,
+    "totalBytes": 881721
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.google.com",
+    "name": "Google.com",
+    "industry": "Technology",
+    "estimatedCO2": 0.181,
+    "totalBytes": 452329
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.ibm.com",
+    "name": "IBM.com",
+    "industry": "Technology",
+    "estimatedCO2": 1.524,
+    "totalBytes": 3809735
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.oracle.com",
+    "name": "Oracle.com",
+    "industry": "Technology",
+    "estimatedCO2": 0.348,
+    "totalBytes": 869687
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.netflix.com",
+    "name": "Netflix.com",
+    "industry": "Entertainment",
+    "estimatedCO2": 1.026,
+    "totalBytes": 2565086
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.hulu.com",
+    "name": "Hulu.com",
+    "industry": "Entertainment",
+    "estimatedCO2": 1.548,
+    "totalBytes": 3869100
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.disneyplus.com",
+    "name": "DisneyPlus.com",
+    "industry": "Entertainment",
+    "estimatedCO2": 0.441,
+    "totalBytes": 1102211
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.hbo.com",
+    "name": "HBO.com",
+    "industry": "Entertainment",
+    "estimatedCO2": 0.957,
+    "totalBytes": 2393106
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.sling.com",
+    "name": "Sling.com",
+    "industry": "Entertainment",
+    "estimatedCO2": 0.144,
+    "totalBytes": 361159
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.ups.com",
+    "name": "UPS.com",
+    "industry": "Logistics",
+    "estimatedCO2": 0,
+    "totalBytes": 63
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.fedex.com",
+    "name": "Fedex.com",
+    "industry": "Logistics",
+    "estimatedCO2": 0,
+    "totalBytes": 0
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.usps.com",
+    "name": "USPS.com",
+    "industry": "Logistics",
+    "estimatedCO2": 0.523,
+    "totalBytes": 1306028
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.dhl.com",
+    "name": "DHL.com",
+    "industry": "Logistics",
+    "estimatedCO2": 0,
+    "totalBytes": 0
+  },
+  {
+    "date": "28-2-2024",
+    "domain": "www.lasership.com",
+    "name": "LaserShip.com",
+    "industry": "Logistics",
+    "estimatedCO2": 5.457,
+    "totalBytes": 13640274
   }
 ]
