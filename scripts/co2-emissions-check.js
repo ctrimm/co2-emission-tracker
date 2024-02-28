@@ -22,7 +22,7 @@ function logErrorToFile(filePath, domain, error) {
   }
 
   // Add the new error
-  errorLog.push({ domain, error: error.message });
+  errorLog.push({ domain, error: JSON.stringify(error) });
 
   // Write the updated error log back to the file
   writeFileSync(filePath, JSON.stringify(errorLog, null, 2), 'utf8');
@@ -61,9 +61,8 @@ function getCurrentDate() {
 async function checkGreenHosting(domain) {
   try {
     console.log(`Checking green hosting for ${domain}`);
-    hosting.check(domain, "myGreenWebApp").then((result) => {
-      return result;
-    });
+    const result = await hosting.check(domain, "myGreenWebApp");
+    return result;
   } catch (error) {
     console.error(`Error checking green hosting for ${domain}: ${error}`);
     return false;
@@ -136,7 +135,7 @@ async function processDomains(filePath) {
         appendToCSV(outputCSV, record);
         appendToJson(jsonOutputPath, record);
       }
-    } catch {
+    } catch (error) {
       console.error(`ERROR PROCESSING DOMAIN: ${domain.website}: ${error}`);
       logErrorToFile(errorLogPath, domain.website, error);
     }
