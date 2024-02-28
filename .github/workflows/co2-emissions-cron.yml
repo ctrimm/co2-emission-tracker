@@ -47,6 +47,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git add src/content/emissions_results.csv
             git add public/data/emissions_results.json
+            git add public/data/error_log.json
             git add public/data/sites_to_check.json
             git commit -m "Update emissions & sites to check data"
             git push
