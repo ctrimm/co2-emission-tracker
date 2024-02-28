@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 
 // Define the path for the JSON file
 const jsonOutputPath = './public/data/sites_to_check.json';
