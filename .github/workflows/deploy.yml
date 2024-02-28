@@ -1,13 +1,13 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
-  # Using a different branch name? Replace `main` with your branch’s name
-  push:
-    branches: [ main ]
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
-  # Runs the Build & Deploy after CO2 Emissions Check Cron Job completes successfully
+  # Trigger the workflow every time you merge to the `main` branch
+  pull_request:
+    types: [closed]
+    branches: [ main ]
+  # Trigger workflow after CO2 Emissions Check Cron Job (cron.yml) completes successfully
   workflow_run:
     workflows: ["CO2 Emissions Check Cron Job"]
     types: 
@@ -22,7 +22,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'push' }}
+    # Only run if the CO2 Emissions Check Cron Job completes successfully
+    # or if there is a merge into the main branch
+    if: ${{ github.event.pull_request.merged == true || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4

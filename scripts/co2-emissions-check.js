@@ -96,7 +96,6 @@ async function processDomains(filePath) {
 
   for (let domain of domains) {
     if (domain) {
-
       const isGreen = await checkGreenHosting(domain.website);
       const totalBytes = await getPageDataSize(`http://${domain.website}`);
       const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
@@ -105,10 +104,14 @@ async function processDomains(filePath) {
         domain: domain.website,
         name: domain.name,
         industry: domain.industry,
+        domainType: domain.domainType || '',
+        agency: domain.agency || '',
+        organization: domain.organization || '',
         isGreen,
         estimatedCO2,
         totalBytes
       };
+
       appendToCSV(outputCSV, record);
       appendToJson(jsonOutputPath, record);
     }
