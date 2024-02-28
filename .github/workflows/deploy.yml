@@ -4,14 +4,14 @@ on:
   # Allows you to run this workflow manually from the Actions tab on GitHub.
   workflow_dispatch:
   # Trigger the workflow every time you merge to the `main` branch
-  # pull_request:
-  #   types: [closed]
-  #   branches: [ main ]
-  # # Trigger workflow after CO2 Emissions Check Cron Job (cron.yml) completes successfully
-  # workflow_run:
-  #   workflows: ["CO2 Emissions Check Cron Job"]
-  #   types: 
-  #     - completed
+  pull_request:
+    types: [closed]
+    branches: [ main ]
+  # Trigger workflow after any of the two Cron Jobs completes successfully
+  workflow_run:
+    workflows: ["Daily CO2 Emissions Check Cron Job", "Weekly CO2 Emissions Check Cron Job"]
+    types: 
+      - completed
 
 # Allow this job to clone the repo and create a page deployment
 permissions:
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     # Only run if the CO2 Emissions Check Cron Job completes successfully
     # or if there is a merge into the main branch
-    # if: ${{ github.event.pull_request.merged == true || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.pull_request.merged == true || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
