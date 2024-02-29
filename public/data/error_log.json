@@ -52,8 +52,8 @@
   {
     "url": "abingtonma.gov",
     "type": "ERR_NAME_NOT_RESOLVED, ERR_SSL_PROTOCOL_ERROR, ERR_CONNECTION_RESET, ERR_CERT_COMMON_NAME_INVALID, ERR_TOO_MANY_REDIRECTS",
-  "error": "{}"
-},
+    "error": "{}"
+  },
   {
     "url": "59dcmi.gov",
     "type": "ERR_NAME_NOT_RESOLVED, ERR_SSL_PROTOCOL_ERROR, ERR_CONNECTION_RESET, ERR_CERT_COMMON_NAME_INVALID, ERR_TOO_MANY_REDIRECTS",
@@ -22258,5 +22258,32 @@
     "url": "www.bestbuy.com",
     "type": "ERR_NAME_NOT_RESOLVED, ERR_SSL_PROTOCOL_ERROR, ERR_CONNECTION_RESET, ERR_CERT_COMMON_NAME_INVALID, ERR_TOO_MANY_REDIRECTS",
     "error": "{}"
+  },
+  {
+    "url": "http://www.studentaid.gov",
+    "type": "Timeout or navigation error",
+    "error": "{}"
+  },
+  {
+    "url": "www.studentaid.gov",
+    "error": "{}"
+  },
+  {
+    "url": "http://www.dhl.com",
+    "type": "Timeout or navigation error",
+    "error": "{}"
+  },
+  {
+    "url": "www.dhl.com",
+    "error": "{}"
+  },
+  {
+    "url": "http://www.bestbuy.com",
+    "type": "Timeout or navigation error",
+    "error": "{\"name\":\"TimeoutError\"}"
+  },
+  {
+    "url": "www.bestbuy.com",
+    "error": "{\"name\":\"TimeoutError\"}"
   }
 ]
