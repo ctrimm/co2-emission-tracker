@@ -29,7 +29,7 @@ function appendToJson(filePath, domain) {
 
   // Check if the domain already exists in the sites_to_check JSON file
   if (!jsonData.includes(domain)) {
-    // Check if the data exists in the error_log JSON file
+    // Check if the domain exists in the error_log JSON file
     if (existsSync(jsonErrorLogPath)) {
       const errorLogData = readFileSync(jsonErrorLogPath, 'utf8');
       const errorLogJsonData = errorLogData ? JSON.parse(errorLogData) : [];
@@ -42,7 +42,7 @@ function appendToJson(filePath, domain) {
     }
 
     // Add the new data
-    jsonData.push(data);
+    jsonData.push(domain);
 
     // Write the updated data back to the JSON file
     writeFileSync(filePath, JSON.stringify(jsonData, null, 2), 'utf8');
