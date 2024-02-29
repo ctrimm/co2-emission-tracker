@@ -105,9 +105,9 @@ export const columns: ColumnDef<Emission>[] = [
     meta: { size: '150px' },
     cell: ({ row }) => {
       const estCO2 = parseFloat(row.getValue("estimatedCO2"))
-      // Approx 0.4kg per cup of coffee (400g)
+      // Approx 0.021kg per cup of coffee
       // ((estimatedCO2 * pageviews) / estCO2ForCoffee) = cups of coffee for 1k pageviews
-      const estCO2ForCoffee = 400
+      const estCO2ForCoffee = 21
       const pageviews = 1000
       const formatted = ((estCO2 * pageviews) / estCO2ForCoffee).toFixed(2)
  
