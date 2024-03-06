@@ -2,6 +2,7 @@
 import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 import { ViewTransitions } from "astro:transitions";
+import Posthog from "../Posthog.astro";
 
 interface Props {
   title: string;
@@ -94,5 +95,8 @@ const setDarkMode = () => {
 setDarkMode();
 document.addEventListener("astro:after-swap", setDarkMode);
 </script>
+
+<!-- Posthog Analytics -->
+<Posthog />
 
 <ViewTransitions />
