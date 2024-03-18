@@ -1,7 +1,25 @@
 # co2-emission-tracker
-Built in Public CO2 Emissions Tracker for Various Websites
+[Built in Public]([url](https://twitter.com/cdt5058/status/1760840540378071176)) CO2 Emissions Tracker for Various Websites
 
-Stack -
+## Adding Your Site to the the CO2 Emissions Tracker:
+Adding your site can be done with a simple pull request.
+
+Steps:
+1. Navigate to the [`websites-to-check-weekly.json` file]([url](https://github.com/ctrimm/co2-emission-tracker/blob/main/websites-to-check-weekly-list.json)) or the [`websites-to-check-daily.json` file]([url](https://github.com/ctrimm/co2-emission-tracker/blob/main/websites-to-check-daily-list.json)) depending on your needs.
+1. Add your website URL with matching formatting + information.
+```json
+{
+    "website": "www.epa.gov",
+    "name": "EPA.gov",
+    "industry": "Public Sector",
+    "domainType": "Federal - Executive",
+    "agency": "Environmental Protection Agency",
+    "organization": "Environmental Protection Agency"
+  },
+```
+1. Create a Pull Request for me to review.
+
+### Technology Stack -
 - Astro
 - astro-nomy Astro theme / template
 - GitHub Actions
