@@ -71,11 +71,11 @@ export const navMenuConfig: NavMenuConfig = {
   links: [
     {
       title: "Learn More",
-      href: "/co2-emission-tracker/faq",
+      href: "/faq",
     },
     {
       title: "About",
-      href: "/co2-emission-tracker/about",
+      href: "/about",
     },
   ],
 };

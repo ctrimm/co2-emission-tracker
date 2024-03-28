@@ -42,7 +42,7 @@ export function SheetMobileNav({
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
-        <a href="/co2-emission-tracker" className="flex items-center">
+        <a href="/" className="flex items-center">
           <Icons.logo className="mr-2 size-8" />
           <span className="font-bold">{siteConfig.name}</span>
         </a>
