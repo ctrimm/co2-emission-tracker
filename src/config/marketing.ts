@@ -20,11 +20,11 @@ export const marketingConfig: MarketingConfig = {
     // },
     {
       title: "About",
-      href: "/co2-emission-tracker/about",
+      href: "/about",
     },
     {
       title: "Learn More",
-      href: "/co2-emission-tracker/faq",
+      href: "/faq",
     },
   ],
 }
