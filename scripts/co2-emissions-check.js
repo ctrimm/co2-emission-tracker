@@ -43,7 +43,6 @@ async function getPageDataSize(url) {
   }
 }
 
-
 // Gets the current date in DD-MM-YYYY format
 function getCurrentDate() {
   const today = new Date();
@@ -134,7 +133,7 @@ async function processDomain(domain) {
     appendToJson(jsonEmissionsOutputPath, record);
   } catch (error) {
     console.error(`Error processing domain ${domain.website}: ${error}`);
-    appendToJson(jsonErrorLogPath, {url: domain.website, error: JSON.stringify(error)});
+    appendToJson(jsonErrorLogPath, { url: domain.website, error: JSON.stringify(error) });
   }
 }
 

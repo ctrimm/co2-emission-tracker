@@ -34,6 +34,7 @@ jobs:
 
       - name: Run CO2 Emissions Check
         run: node scripts/co2-emissions-check.js websites-to-check-weekly-list.json
+        continue-on-error: true  # Ensures that the workflow continues even if this step fails
       
       - name: Generate sites_to_check.json file
         run: node scripts/generate-sites-to-check.js websites-to-check-weekly-list.json
