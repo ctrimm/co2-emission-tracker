@@ -16,8 +16,9 @@ const outputCSV = 'src/content/emissions_results.csv';
 
 // Function to get page size
 async function getPageDataSize(url) {
-  const browser = await puppeteer.launch({ headless: true });
+  let browser;
   try {
+    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
     const page = await browser.newPage();
     let totalBytes = 0;
 
@@ -32,15 +33,16 @@ async function getPageDataSize(url) {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 10000 });
     return totalBytes;
   } catch (error) {
-    // Here, you handle the error, e.g., logging or appending it to a file
+    // Log the error to the JSON error log file
     appendToJson(jsonErrorLogPath, { url, type: 'Timeout or navigation error', error: JSON.stringify(error) });
-    // It's important to rethrow the error if you want the calling function to be aware of it
-    throw error;
+    return 0; // Return 0 bytes if there was an error
   } finally {
-    // This block executes regardless of whether an exception occurred or not
-    await browser.close();
+    if (browser) {
+      await browser.close();
+    }
   }
 }
+
 
 // Gets the current date in DD-MM-YYYY format
 function getCurrentDate() {
