@@ -1,4 +1,2 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://co2.ignitebright.com/sitemap-index.xml

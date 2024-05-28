@@ -16,7 +16,7 @@ export default defineConfig({
       shikiConfig: { theme: 'github-dark-dimmed' },
       gfm: true,
     }),
-    sitemap(),
+    // sitemap(),
     react(),
     tailwind({
       applyBaseStyles: false,
