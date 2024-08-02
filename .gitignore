@@ -1,5 +1,5 @@
 dist/*
-node_modules/
+**/node_modules/
 *.env
 node_modules/.vite/
 scripts/getgov/get-gov-munge-output.json
