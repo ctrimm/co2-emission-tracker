@@ -1,6 +1,7 @@
 dist/*
 *.env
 scripts/getgov/get-gov-munge-output.json
+.sst
 
 # dependencies
 **/node_modules
