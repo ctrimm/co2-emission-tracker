@@ -46,7 +46,10 @@ async function getPageDataSize(url) {
 // Gets the current date in DD-MM-YYYY format
 function getCurrentDate() {
   const today = new Date();
-  return `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
+  const day = String(today.getDate()).padStart(2, '0'); // Add leading zero if needed
+  return `${year}-${month}-${day}`;
 }
 
 // Check if a domain is hosted green
@@ -118,7 +121,7 @@ async function processDomain(domain) {
     const totalBytes = await getPageDataSize(`http://${domain.website}`);
     const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
     const record = {
-      date: getCurrentDate(),
+      date: getCurrentDate(), // put this as YYYY-MM-DD
       domain: domain.website,
       name: domain.name,
       industry: domain.industry,
