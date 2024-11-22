@@ -167,7 +167,10 @@ async function processSites() {
       .from('monitored_sites')
       .select('*')
       .eq('is_active', true)
-      .or(`monitoring_frequency.eq.daily,and(monitoring_frequency.eq.weekly,date_part('dow', now()).eq.${dayOfWeek})`);
+      .or([
+        'monitoring_frequency.eq.daily',
+        `and(monitoring_frequency.eq.weekly,date_part('dow',now()).eq.${dayOfWeek})`
+      ]);
 
     if (error) {
       throw error;
