@@ -101,12 +101,6 @@ function estimateEmissions(bytes, isGreen) {
   return parseFloat(co2Emission.perByte(bytes, isGreen).toFixed(3));
 }
 
-// Append to CSV (keeping for backward compatibility)
-function appendToCSV(filePath, data) {
-  const csvContent = `${data.date},${data.domain},${data.name},${data.isGreen},${data.totalBytes},${data.estimatedCO2}\n`;
-  writeFileSync(filePath, csvContent, { flag: 'a' });
-}
-
 async function processDomain(site) {
   try {
     const isGreen = await checkGreenHosting(site.domain);
@@ -171,12 +165,13 @@ async function processSites() {
     if (dailyError) throw dailyError;
 
     // Get weekly sites for current day
+    // Using PostgreSQL's EXTRACT(DOW FROM NOW()) for day of week
     const { data: weeklySites, error: weeklyError } = await supabase
       .from('monitored_sites')
       .select('*')
       .eq('is_active', true)
       .eq('monitoring_frequency', 'weekly')
-      .filter('date_part', 'dow', 'now()', 'eq', dayOfWeek);
+      .eq('check_day', dayOfWeek); // Assuming we have a check_day column
 
     if (weeklyError) throw weeklyError;
 
