@@ -1,12 +1,9 @@
 "use client"
 
+import { useEffect, useState } from "react";
 import { columns, type Emission } from "../emission/columns"
 import { DataTable } from "./data-table"
-
-import emissionsResultsJSON from "public/data/emissions_results.json";
-
-const data = emissionsResultsJSON;
-
+import { supabase } from "@/lib/supabase";
 import {
   AreaChart,
   Area,
@@ -16,42 +13,50 @@ import {
   ResponsiveContainer,
   Tooltip
 } from "recharts";
- 
-// async function getData(): Promise<Payment[]> {
-//   // Fetch data from your API here.
-//   return [
-//     {
-//       id: "728ed52f",
-//       amount: 100,
-//       status: "success",
-//       email: "m@example.com",
-//     }, {
-//       id: "728ed52f",
-//       amount: 50,
-//       status: "pending",
-//       email: "a@example.com"
-//     }, {
-//       id: "728ed52f",
-//       amount: 220,
-//       status: "failed",
-//       email: "f@example.com"
-//     }
-//     // ...
-//   ]
-// }
-
-// const data = await getData();
 
 interface WrapperProps {
   "client:load": boolean;
+  domain?: string;
+}
+
+interface ChartDataPoint {
+  date: string;
+  name: string;
+  co2: number;
+  industryAverageCo2: number;
 }
 
 interface AreaWrapperProps {
   "client:load": boolean;
-  "data": {name: string; co2: number; industryAverageCo2: number;}[]
+  data: ChartDataPoint[];
 }
 
 const TableWrapper = (props: WrapperProps) => {
+  const [data, setData] = useState<Emission[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data: emissions, error } = await supabase
+          .from('website_emissions')
+          .select('*')
+          .order('date', { ascending: false });
+
+        if (error) throw error;
+        setData(emissions || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className="container mx-auto py-4">
       <DataTable columns={columns} data={data} />
@@ -59,13 +64,16 @@ const TableWrapper = (props: WrapperProps) => {
   );
 }
 
-const AreaChartWrapper = (props: AreaWrapperProps) => {
+const AreaChartWrapper = ({ data }: AreaWrapperProps) => {
+  if (!data || data.length === 0) {
+    return <div>No chart data available</div>;
+  }
+
   return (
     <div className="container mx-auto h-[18rem]">
-      <ResponsiveContainer  height="100%">
-
+      <ResponsiveContainer height="100%">
         <AreaChart
-          data={props.data}
+          data={data}
           margin={{
             top: 10,
             right: 30,
@@ -87,8 +95,21 @@ const AreaChartWrapper = (props: AreaWrapperProps) => {
           <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
-          <Area type="monotone" dataKey="co2" stroke="#8884d8" fill="#8884d8" />
-          <Area type="monotone" dataKey="industryAverageCo2" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+          <Area 
+            type="monotone" 
+            dataKey="co2" 
+            stroke="#8884d8" 
+            fill="#8884d8" 
+            name="CO2 Emissions"
+          />
+          <Area 
+            type="monotone" 
+            dataKey="industryAverageCo2" 
+            stroke="#82ca9d" 
+            fillOpacity={1} 
+            fill="url(#colorPv)"
+            name="Industry Average"
+          />
         </AreaChart>
       </ResponsiveContainer>
     </div>

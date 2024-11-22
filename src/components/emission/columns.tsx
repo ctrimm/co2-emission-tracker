@@ -9,10 +9,10 @@ import { Button } from "../ui/button"
 export type Emission = {
   date: string
   domain: string
-  isGreen: boolean;
-  estimatedCO2: number
-  totalBytes: number
-  cupsOfCoffee: number
+  is_green: boolean;
+  estimated_co2_grams: number
+  total_bytes: number
+  cups_of_coffee: number
 }
 
 export const columns: ColumnDef<Emission>[] = [
@@ -52,7 +52,7 @@ export const columns: ColumnDef<Emission>[] = [
     },
   },
   {
-    accessorKey: "isGreen",
+    accessorKey: "is_green",
     header: ({ column }) => {
       return (
         <Button
@@ -65,11 +65,11 @@ export const columns: ColumnDef<Emission>[] = [
       )
     },
     cell: ({ row }) => {
-      return <div className="text-center">{row.getValue("isGreen") ? "Yes" : "No"}</div>
+      return <div className="text-center">{row.getValue("is_green") ? "Yes" : "No"}</div>
     }
   },
   {
-    accessorKey: "totalBytes",
+    accessorKey: "total_bytes",
     header: ({ column }) => {
       return (
         <Button
@@ -82,12 +82,12 @@ export const columns: ColumnDef<Emission>[] = [
       )
     },
     cell: ({ row }) => {
-      // If the totalBytes is `0` then we display `-` instead of `0`
-      return <div className="text-center">{(row.getValue("totalBytes") !== 0) ? ((row.getValue("totalBytes") as number) / 1048576).toFixed(2) : '-'}</div>
+      // If the total_bytes is `0` then we display `-` instead of `0`
+      return <div className="text-center">{(row.getValue("total_bytes") !== 0) ? ((row.getValue("total_bytes") as number) / 1048576).toFixed(2) : '-'}</div>
     }
   },
   {
-    accessorKey: "estimatedCO2",
+    accessorKey: "estimated_co2_grams",
     header: ({ column }) => {
       return (
         <Button
@@ -100,17 +100,17 @@ export const columns: ColumnDef<Emission>[] = [
       )
     },
     cell: ({ row }) => {
-      return <div className="text-center">{(row.getValue("estimatedCO2") !== 0) ? row.getValue("estimatedCO2") : '-'}</div>
+      return <div className="text-center">{(row.getValue("estimated_co2_grams") !== 0) ? row.getValue("estimated_co2_grams") : '-'}</div>
     }
   },
   {
-    accessorKey: "cupsOfCoffee",
-    header: "Equivalent to X Cups of Coffee Per 1k Pageviews",
+    accessorKey: "cups_of_coffee",
+    header: "Equivalent to ☕ Per 1k Pageviews",
     meta: { size: '150px' },
     cell: ({ row }) => {
-      const estCO2 = parseFloat(row.getValue("estimatedCO2"))
+      const estCO2 = parseFloat(row.getValue("estimated_co2_grams"))
       // Approx 0.021kg per cup of coffee
-      // ((estimatedCO2 * pageviews) / estCO2ForCoffee) = cups of coffee for 1k pageviews
+      // ((estimated_co2_grams * pageviews) / estCO2ForCoffee) = cups of coffee for 1k pageviews
       const estCO2ForCoffee = 21
       const pageviews = 1000
       const formatted = ((estCO2 * pageviews) / estCO2ForCoffee).toFixed(2)

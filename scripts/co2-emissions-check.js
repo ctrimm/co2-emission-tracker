@@ -1,24 +1,48 @@
-import { appendFileSync, existsSync, writeFileSync, readFileSync } from 'fs';
 import { hosting, co2 } from '@tgwf/co2';
 import puppeteer from 'puppeteer';
 import pLimit from 'p-limit';
+import { createClient } from '@supabase/supabase-js';
 
-// Limit the number of concurrent domain processing operations
-const limit = pLimit(10); // Assuming you want to have 10 operations in parallel at most
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
-// Initialize the CO2 estimation library
+// Limit concurrent operations
+const limit = pLimit(10);
+
+// Initialize CO2 estimation library
 const co2Emission = new co2();
 
-// Define the path for the JSON files
-const jsonEmissionsOutputPath = './public/data/emissions_results.json';
-const jsonErrorLogPath = './public/data/error_log.json';
-const outputCSV = 'src/content/emissions_results.csv';
+async function logError(url, errorType, errorMessage, severity = 'error', details = null) {
+  try {
+    const { error } = await supabase
+      .from('error_log')
+      .insert({
+        url,
+        error_type: errorType,
+        error_message: errorMessage,
+        error_severity: severity,
+        error_details: details ? JSON.stringify(details) : null,
+        created_at: new Date().toISOString()
+      });
 
-// Function to get page size
+    if (error) {
+      console.error('Failed to log error to Supabase:', error);
+    }
+  } catch (e) {
+    console.error('Exception while logging error:', e);
+  }
+}
+
 async function getPageDataSize(url) {
   let browser;
   try {
-    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    browser = await puppeteer.launch({ 
+      headless: true, 
+      args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+    });
     const page = await browser.newPage();
     let totalBytes = 0;
 
@@ -29,122 +53,141 @@ async function getPageDataSize(url) {
       }
     });
 
-    // Timeout is set to 10 seconds
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 10000 });
     return totalBytes;
   } catch (error) {
-    // Log the error to the JSON error log file
-    appendToJson(jsonErrorLogPath, { url, type: 'Timeout or navigation error', error: JSON.stringify(error) });
-    return 0; // Return 0 bytes if there was an error
+    await logError(
+      url,
+      'Timeout or navigation error',
+      error.message,
+      'error',
+      {
+        stack: error.stack,
+        timestamp: new Date().toISOString(),
+        browserVersion: await browser?.version() || 'unknown'
+      }
+    );
+    return 0;
   } finally {
-    if (browser) {
-      await browser.close();
-    }
+    if (browser) await browser.close();
   }
 }
 
-// Gets the current date in DD-MM-YYYY format
 function getCurrentDate() {
   const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
-  const day = String(today.getDate()).padStart(2, '0'); // Add leading zero if needed
-  return `${year}-${month}-${day}`;
+  return today.toISOString().split('T')[0]; // Returns YYYY-MM-DD
 }
 
-// Check if a domain is hosted green
 async function checkGreenHosting(domain) {
   try {
     console.log(`Checking green hosting for ${domain}`);
-    const result = await hosting.check(domain, "myGreenWebApp");
-    return result;
+    return await hosting.check(domain, "myGreenWebApp");
   } catch (error) {
-    // Log the error to a file
-    appendToJson(jsonErrorLogPath, { domain,  type: 'Error Checking Green Hosting', error: JSON.stringify(error) });
-    // console.error(`Error checking green hosting for ${domain}: ${error}`);
+    await logError(
+      domain,
+      'Green Hosting Check Error',
+      error.message,
+      'warning',
+      {
+        timestamp: new Date().toISOString(),
+        hostingCheckVersion: hosting.version || 'unknown'
+      }
+    );
     return false;
   }
 }
 
-// Estimate CO2 emissions for a given number of bytes and hosting type
 function estimateEmissions(bytes, isGreen) {
   return parseFloat(co2Emission.perByte(bytes, isGreen).toFixed(3));
 }
 
-// Append data to the CSV file
+// Append to CSV (keeping for backward compatibility)
 function appendToCSV(filePath, data) {
-  const csvContent = `${data.date},${data.domain},${data.isGreen},${data.totalBytes},${data.estimatedCO2}\n`;
-  appendFileSync(filePath, csvContent, 'utf8');
+  const csvContent = `${data.date},${data.domain},${data.name},${data.isGreen},${data.totalBytes},${data.estimatedCO2}\n`;
+  writeFileSync(filePath, csvContent, { flag: 'a' });
 }
 
-// Function to add data to the JSON file
-function appendToJson(filePath, data) {
-  let jsonData = [];
-
-  // Check if the JSON file already exists and has content
-  if (existsSync(filePath)) {
-    // Read the current data and parse it
-    const existingData = readFileSync(filePath, 'utf8');
-    jsonData = existingData ? JSON.parse(existingData) : [];
-  }
-
-  // Add the new data
-  jsonData.push(data);
-
-  // Write the updated data back to the JSON file
-  writeFileSync(filePath, JSON.stringify(jsonData, null, 2), 'utf8');
-}
-
-// Process each domain from the file
-async function processDomains(filePath) {
-  // Check if the CSV file exists; if not, create it with headers
-  if (!existsSync(outputCSV)) {
-    writeFileSync(outputCSV, 'Date,Domain,Name,IsGreen,EstimatedBytes,EstimatedCO2Grams\n', 'utf8');
-  }
-
-  // Read / parse the JSON file
-  const domains = JSON.parse(readFileSync(filePath, 'utf8'));
-  const promises = [];
-
-  for (const domain of domains) {
-    const promise = limit(() => processDomain(domain)); // processDomain would be an async function handling the processing for a single domain
-    promises.push(promise);
-  }
-
-  // Wait for all the promises to resolve
-  await Promise.all(promises);
-}
-
-async function processDomain(domain) {
+async function processDomain(site) {
   try {
-    const isGreen = await checkGreenHosting(domain.website);
-    const totalBytes = await getPageDataSize(`http://${domain.website}`);
+    const isGreen = await checkGreenHosting(site.domain);
+    const totalBytes = await getPageDataSize(`http://${site.domain}`);
     const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
+    
     const record = {
-      date: getCurrentDate(), // put this as YYYY-MM-DD
-      domain: domain.website,
-      name: domain.name,
-      industry: domain.industry,
-      domainType: domain.domainType || '',
-      agency: domain.agency || '',
-      organization: domain.organization || '',
-      isGreen,
-      estimatedCO2,
-      totalBytes
+      date: getCurrentDate(),
+      domain: site.domain,
+      name: site.name,
+      industry: site.industry,
+      domain_type: site.domain_type,
+      agency: site.agency,
+      organization: site.organization,
+      is_green: isGreen,
+      estimated_co2_grams: estimatedCO2,
+      total_bytes: totalBytes,
+      created_at: new Date().toISOString()
     };
-    appendToCSV(outputCSV, record);
-    appendToJson(jsonEmissionsOutputPath, record);
+
+    const { error } = await supabase
+      .from('website_emissions')
+      .upsert(record, {
+        onConflict: 'date,domain',
+        ignoreDuplicates: true
+      });
+
+    if (error) {
+      console.error(`Error inserting record for ${site.domain}:`, error);
+      throw error;
+    }
+
+    console.log(`Successfully processed ${site.domain}`);
+
   } catch (error) {
-    console.error(`Error processing domain ${domain.website}: ${error}`);
-    appendToJson(jsonErrorLogPath, { url: domain.website, error: JSON.stringify(error) });
+    console.error(`Error processing domain ${site.domain}:`, error);
+    await logError(
+      site.domain,
+      'Domain Processing Error',
+      error.message,
+      'error',
+      {
+        timestamp: new Date().toISOString(),
+        details: error.stack
+      }
+    );
   }
 }
 
-// File path should be passed as a command-line argument
-const filePath = process.argv[2];
-if (!filePath) {
-  console.error('Please provide a file path containing the JSON blob of domains to check.');
-  process.exit(1);
+async function processSites() {
+  try {
+    // Get current day of week (0 = Sunday, 6 = Saturday)
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    
+    // Fetch active sites based on monitoring frequency
+    const { data: sites, error } = await supabase
+      .from('monitored_sites')
+      .select('*')
+      .eq('is_active', true)
+      .or(`monitoring_frequency.eq.daily,and(monitoring_frequency.eq.weekly,date_part('dow', now()).eq.${dayOfWeek})`);
+
+    if (error) {
+      throw error;
+    }
+
+    console.log(`Processing ${sites.length} sites...`);
+
+    const promises = sites.map(site => limit(() => processDomain(site)));
+    await Promise.all(promises);
+    
+    console.log('All sites processed successfully');
+  } catch (error) {
+    console.error('Error processing sites:', error);
+    throw error;
+  }
 }
 
-processDomains(filePath);
+// Main execution
+processSites()
+  .catch(error => {
+    console.error('Error in main process:', error);
+    process.exit(1);
+  });

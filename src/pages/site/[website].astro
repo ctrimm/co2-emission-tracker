@@ -1,253 +1,52 @@
 ---
-import { siteConfig } from "@/config/site";
 import MainLayout from "@/layouts/main-layout.astro";
-import { AreaChartWrapper } from "@/components/ui/wrapper";
-import { cn } from "@/lib/utils"
+import { WebsiteStats } from "@/components/WebsiteStats";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-
-// import sites to check
-import sites from "public/data/sites_to_check.json";
-
-export function getStaticPaths() {
-  return sites.map((website: string) => ({ params: { website } }));
-}
-
+// Get the website parameter from the URL
 const { website } = Astro.params;
 
-// import the emissions data set
-import emissionsResults from "public/data/emissions_results.json";
-
-// iterate over emissions and find all the mataches on the website variable and store it in a variable
-const websiteData = emissionsResults.filter((result) => result.domain == website);
-
-// iterate over the data and find the latest data
-const latestData = websiteData[websiteData.length - 1];
-
-// average grams per last 7 page loads for this website from the websiteData var
-const averageGramsPerLoad = websiteData.reduce((acc, cur) => acc + cur.estimatedCO2, 0) / websiteData.length;
-
-// average Megabytes per last 7 page loads for this website from the websiteData var
-const averageBytesPerLoad = websiteData.reduce((acc, cur) => acc + cur.totalBytes, 0) / websiteData.length;
-const averageMBPerLoad = averageBytesPerLoad / 1048576;
-
-// TO-DO << Fix this when people run on their own schedule
-// Calculate time since last index time (assuming all runs are at midnigth)
-const now = new Date();
-const estNow = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
-const midnightEst = new Date(estNow);
-midnightEst.setHours(0, 0, 0, 0);
-const diffHours = Math.floor((Number(now) - Number(midnightEst)) / 1000 / 60 / 60);
-const timeSinceMidnight = `~${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
-
-// Cups of Coffee caclulation
-const co2EmissionsPerCupOfCoffee = 400; // in grams (0.4kg per cup from source - https://www.co2everything.com/co2e-of/coffee)
-const pageViews = 1_000_000; // 1 million page views
-const totalCo2Emissions = websiteData.reduce((acc, cur) => acc + cur.estimatedCO2, 0);
-const averageCo2Emissions = totalCo2Emissions / websiteData.length;
-const cupsOfCoffee = (averageCo2Emissions / co2EmissionsPerCupOfCoffee) * (pageViews);
-
-// Filter the emissionsResults array to include only the results for the same industry
-const industryResults = emissionsResults.filter((result) => result.industry == latestData.industry);
-
-// Calculate the industry average for the CO2 estimate
-const industryAverageCo2 = industryResults.reduce((acc, cur) => acc + cur.estimatedCO2, 0) / industryResults.length;
-
-// Get the last 7 items from the websiteData array
-const lastSevenScans = websiteData.slice(Math.max(websiteData.length - 7, 0));
-
-// Calculate the industry average for the grams per load
-const industryAverageGramsPerLoad = industryResults.reduce((acc, cur) => acc + cur.estimatedCO2, 0) / industryResults.length;
-
-// Calculate the percentage difference
-const gramsPerLoadvIndustryDiff = (((averageGramsPerLoad - industryAverageGramsPerLoad) / industryAverageGramsPerLoad) * 100).toFixed(2);
-const gramsPerLoadvIndustryArrow = Number(gramsPerLoadvIndustryDiff) >= 0 ? '↑' : '↓';
-
-// Calc whether the last 7 scans are trending up, down, or flat
-const trend = latestData.estimatedCO2 - averageGramsPerLoad;
-const trendArrow = trend > 5 ? '↑' : trend < -5 ? '↓' : '--';
-const trendSubText = trend > 5 ? 'up' : trend < -5 ? 'down' : 'relatively flat';
-
-
-const topOfGraphInfoForCards = [
-  {
-    cardTitle: "Industry",
-    cardContent: latestData.industry,
-  },
-  {
-    cardTitle: "Total Times Indexed",
-    cardContent: websiteData.length,
-    cardFooter: timeSinceMidnight,
-  },
-  {
-    cardTitle: "Green Hosted?",
-    cardContent: latestData.isGreen ? 'YES' : 'NO',
-    // conditional class for green / red depending on latestData.isGreen
-    cardClass: cn({
-      'text-gradient_sky-emerald': latestData.isGreen,
-      'text-gradient_orange-red': !latestData.isGreen,
-    }),
-    cardFooter: "1 hour ago",
-  },
-  {
-    cardTitle: `Average of Last ${websiteData.length} Page Loads`,
-    cardContent: `${averageGramsPerLoad.toFixed(3)} g`,
-    cardFooter: "of CO2 emission per page load",
-  },
-];
-
-const bottomOfGraphInfoForCards = [
-  {
-    cardTitle: "Emissions Trending",
-    // Display cardContent that says whether or not the emissions are trending up, down, or flat
-    cardContent: `${trendArrow}`,
-    cardFooter: trendSubText,
-  },
-  {
-    cardTitle: "Per Page Load",
-    cardContent: `${(averageMBPerLoad).toFixed(2)} MB`,
-    cardFooter: "on average",
-  },
-  {
-    cardTitle: "Compared to Industry Avg.",
-    // Display cardContent that is a % difference from the industry average
-    cardContent: `${gramsPerLoadvIndustryDiff}% ${gramsPerLoadvIndustryArrow}`,
-    cardClass: cn({
-      'text-gradient_sky-emerald': Number(gramsPerLoadvIndustryDiff) < 0,
-      'text-gradient_orange-red': Number(gramsPerLoadvIndustryDiff) >= 0,
-    }),
-    cardFooter: "from industry avg.",
-  },
-  {
-    cardTitle: "# of Coffees",
-    cardContent: cupsOfCoffee.toFixed(0),
-    cardFooter: "for every 1M Visitors",
-  },
-];
-
-// Map each item to an object that matches the structure of the stubbed data
-const data = lastSevenScans.map((scan, index) => {
-  const [day, month, year] = scan.date.split('-');
-  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-  return {
-    date,
-    name: `Scan ${index + 1}`,
-    co2: scan.estimatedCO2,
-    industryAverageCo2: industryAverageCo2.toFixed(3),
-  };
-});
-
-// console.log('data - ', data);
-
+// Debug log
+console.log('Website param:', website);
 ---
-<MainLayout title="CO2 Web Emissions Tracker">
-  <section
-    id="data"
-    class="container bg-slate-50 dark:bg-transparent py-4 md:py-6 lg:py-10"
-  >
-    <div
-      class="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center"
-    >
-      <h5 class="font-heading text-lg leading-[1.1] sm:text-xl md:text-xl">
+
+<MainLayout title={`${website} - CO2 Stats`}>
+  <section id="data" class="container bg-slate-50 dark:bg-transparent py-4 md:py-6 lg:py-10">
+    <div class="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
+      <h5 class="font-heading text-lg leading-[1.1] sm:text-xl md:text-xl text-muted-foreground">
         Viewing Results For
       </h5>
       <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
-        {latestData.name}
+        {website}
       </h2>
-      <p
-        class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
-      >
-        Let's take a look at the carbon emissions data for <a href=`http://${website}` class="underline text-gradient_sky-emerald hover:decoration-emerald-500 underline underline-offset-4" target="_blank" rel="noreferrer">{website}</a>. It is updated nightly and is
-        available at the
-        <a
-          href={siteConfig.links.github}
-          target="_blank"
+      <p class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text">
+        Let's take a look at the carbon emissions data for{" "}
+        <a 
+          href={`http://${website}`} 
+          class="underline text-gradient_sky-emerald hover:decoration-emerald-500 underline underline-offset-4" 
+          target="_blank" 
           rel="noreferrer"
+        >
+          {website}
+        </a>. 
+        It is updated nightly and is available at the{" "}
+        <a 
+          href="https://github.com/ctrimm/co2-emission-tracker" 
+          target="_blank" 
+          rel="noreferrer" 
           class="decoration-emerald-500 underline underline-offset-4"
         >
-          GitHub repo</a>.
+          GitHub repo
+        </a>.
       </p>
     </div>
   </section>
-  <section id="Latest Data" class="container py-8 md:py-12 lg:py-20">
-    <div class="flex items-center justify-between space-y-2">
-      <h2 class="text-3xl font-bold tracking-tight">
-        Latest Data
-      </h2>
+  
+  {/* Add error boundary */}
+  {website ? (
+    <WebsiteStats client:load domain={website} />
+  ) : (
+    <div class="container mx-auto">
+      <p class="text-red-500">No website specified</p>
     </div>
-    <!-- Individual Cards For Top-Level Metrics -->
-    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 py-4">
-      {topOfGraphInfoForCards.map((card) => (
-        <Card>
-          <CardHeader>
-            <CardTitle className="tracking-tight text-sm font-medium text-center">{card.cardTitle}</CardTitle>
-            {card.cardDescription ? <CardDescription>{(card.cardDescription)}</CardDescription> : ''}
-          </CardHeader>
-          <CardContent className={card.cardClass}>
-            <p class={`font-bold text-center ${card.cardTitle.length < 10 ? 'text-5xl' : 'text-6xl'}`}>{card.cardContent}</p>
-          </CardContent>
-          <CardFooter>
-            <p class="m-auto text-xs text-muted-foreground text-center">{card.cardFooter}</p>
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
-    <!-- Area Chart Div -->
-    <Card>
-      <CardHeader>
-        <CardTitle>Last 7 scans</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <AreaChartWrapper client:load data={data} />
-      </CardContent>
-    </Card>
-    <!-- Trending Cards -->
-    <div class="grid gap-4 lg:grid-cols-4 py-4">
-      {bottomOfGraphInfoForCards.map((card) => (
-        <Card>
-          <CardHeader>
-            <CardTitle className="tracking-tight text-sm font-medium text-center">{card.cardTitle}</CardTitle>
-            {card.cardDescription ? <CardDescription>{(card.cardDescription)}</CardDescription> : ''}
-          </CardHeader>
-          <CardContent className={card.cardClass}>
-            <p class="text-6xl font-bold text-center">{card.cardContent}</p>
-          </CardContent>
-          <CardFooter>
-            <p class="m-auto text-xs text-muted-foreground text-center">{card.cardFooter}</p>
-          </CardFooter>
-        </Card>
-      ))}
-  </section>
-  <section id="open-source" class="container py-8 md:py-12 lg:py-20">
-    <div
-      class="mx-auto flex max-w-[58rem] flex-col items-center justify-center gap-4 text-center"
-    >
-      <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
-        Proudly Open Source
-      </h2>
-      <p
-        class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7"
-      >
-        CO2 Web Emissions Tracker is open source and powered by open source software. <br />{
-          " "
-        }
-         The code is available on{" "}
-        <a
-          href={siteConfig.links.github}
-          target="_blank"
-          rel="noreferrer"
-          class="underline underline-offset-4 decoration-emerald-500"
-        >
-          GitHub</a>.
-      </p>
-    </div>
-  </section>
+  )}
 </MainLayout>

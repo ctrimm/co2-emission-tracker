@@ -1,15 +1,34 @@
-import mdx from "@astrojs/mdx";
-import react from "@astrojs/react";
-// import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
+import mdx from "@astrojs/mdx";
+import tailwind from "@astrojs/tailwind";
+import node from '@astrojs/node';
+// import sitemap from "@astrojs/sitemap";
 // import vercel from '@astrojs/vercel/static';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://co2.ignitebright.com',
+  vite: {
+    ssr: {
+      noExternal: ['entities']
+    },
+    build: {
+      // Reduce chunk size warnings
+      chunkSizeWarningLimit: 1600,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split vendor chunks for better caching
+            vendor: ['react', 'react-dom'],
+          },
+        },
+      },
+    }
+  },
   // base: '/co2-emission-tracker/',
   trailingSlash: 'never',
+  output: 'server', // Enable SSR
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
@@ -22,6 +41,10 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
+  adapter: node({
+    mode: 'standalone',
+    env: true
+  })
   // adapter: vercel({
   //   analytics: true,
   // }),
