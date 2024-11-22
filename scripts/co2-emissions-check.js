@@ -158,23 +158,30 @@ async function processDomain(site) {
 
 async function processSites() {
   try {
-    // Get current day of week (0 = Sunday, 6 = Saturday)
     const today = new Date();
     const dayOfWeek = today.getDay();
     
-    // Fetch active sites based on monitoring frequency
-    const { data: sites, error } = await supabase
+    // Get daily sites
+    const { data: dailySites, error: dailyError } = await supabase
       .from('monitored_sites')
       .select('*')
       .eq('is_active', true)
-      .or([
-        'monitoring_frequency.eq.daily',
-        `and(monitoring_frequency.eq.weekly,date_part('dow',now()).eq.${dayOfWeek})`
-      ]);
+      .eq('monitoring_frequency', 'daily');
 
-    if (error) {
-      throw error;
-    }
+    if (dailyError) throw dailyError;
+
+    // Get weekly sites for current day
+    const { data: weeklySites, error: weeklyError } = await supabase
+      .from('monitored_sites')
+      .select('*')
+      .eq('is_active', true)
+      .eq('monitoring_frequency', 'weekly')
+      .filter('date_part', 'dow', 'now()', 'eq', dayOfWeek);
+
+    if (weeklyError) throw weeklyError;
+
+    // Combine the results
+    const sites = [...(dailySites || []), ...(weeklySites || [])];
 
     console.log(`Processing ${sites.length} sites...`);
 
