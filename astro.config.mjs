@@ -14,6 +14,7 @@ export default defineConfig({
       noExternal: ['entities']
     },
     build: {
+      assets: '_assets',
       // Reduce chunk size warnings
       chunkSizeWarningLimit: 1600,
       rollupOptions: {
@@ -28,7 +29,7 @@ export default defineConfig({
   },
   // base: '/co2-emission-tracker/',
   trailingSlash: 'never',
-  output: 'server', // Enable SSR
+  output: 'static',
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',

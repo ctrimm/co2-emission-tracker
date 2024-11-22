@@ -50,6 +50,9 @@ jobs:
         env:
           CI: true
 
+      - name: List build output
+        run: ls -la dist/  # This will help debug what files are actually being built
+
       - name: Fix permissions
         run: |
           chmod -c -R +rX "_site/" | while read line; do
