@@ -6,6 +6,8 @@ const supabase = createClient(
   Resource.MySupabaseAnonRoleKey.value
 );
 
+// NOTE - this is just for the index page since we dont want to get all the data
+// it will just return the latest emission for each unique domain
 export async function handler(_evt) {
   try {
     // First, get the total count of monitored sites
@@ -15,9 +17,9 @@ export async function handler(_evt) {
       .eq('is_active', true);
 
     // Get the latest emission for each unique domain
-    const { data: emissions, error } = await supabase
+    const { data: emissions, error, count } = await supabase
       .from('website_emissions')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('date', { ascending: false })
       .limit(1)
       .or('domain.not.is.null')
@@ -27,7 +29,7 @@ export async function handler(_evt) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ emissions }),
+      body: JSON.stringify({ emissions, count }),
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "public, max-age=300" // Cache for 5 minutes
