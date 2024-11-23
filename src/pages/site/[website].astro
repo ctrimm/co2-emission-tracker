@@ -3,7 +3,7 @@ import MainLayout from "@/layouts/main-layout.astro";
 import { WebsiteStats } from "@/components/WebsiteStats";
 
 // Mark this page for server-side rendering
-export const prerender = false;
+export const prerender = true;
 
 // Get the website parameter from the URL
 const { website } = Astro.params;

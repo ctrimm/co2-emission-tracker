@@ -50,8 +50,17 @@ jobs:
         env:
           CI: true
 
-      - name: List build output
-        run: ls -la dist/client/  # This will help debug what files are actually being built
+      - name: Debug build output
+        run: |
+          echo "Contents of dist directory:"
+          ls -la dist/
+          echo "\nContents of src/pages directory:"
+          ls -la src/pages/
+          echo "\nChecking for index.html:"
+          find dist/ -name "index.html"
+
+      # - name: List build output
+      #   run: ls -la dist/client/  # This will help debug what files are actually being built
 
       # - name: Fix permissions
       #   run: |
