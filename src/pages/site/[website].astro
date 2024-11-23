@@ -6,21 +6,22 @@ import { createClient } from '@supabase/supabase-js';
 // Mark this page for static generation
 export const prerender = true;
 
-// Create Supabase client inside the function
-const supabase = createClient(
-  import.meta.env.NEXT_PUBLIC_SUPABASE_URL,
-  import.meta.env.SUPABASE_SERVICE_ROLE_KEY
-);
-
 // Generate static paths for all monitored websites
 export async function getStaticPaths() {
+  const supabase = createClient(
+    import.meta.env.PUBLIC_SUPABASE_URL,
+    import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+  );
+
   try {
-    // Method 2: Use pagination to get all sites
     let allSites = [];
     let page = 0;
     const pageSize = 1000;
+    const startTime = Date.now();
     
     while (true) {
+      console.log(`Fetching page ${page + 1}...`);
+      
       const { data: siteBatch, error } = await supabase
         .from('monitored_sites')
         .select('domain')
@@ -34,20 +35,22 @@ export async function getStaticPaths() {
       }
 
       if (!siteBatch || siteBatch.length === 0) {
-        break; // No more sites to fetch
+        break;
       }
 
       allSites = [...allSites, ...siteBatch];
+      console.log(`Fetched ${allSites.length} sites so far...`);
+      
       if (siteBatch.length < pageSize) {
-        break; // Last page
+        break;
       }
       
       page++;
     }
 
-    console.log(`Total sites fetched: ${allSites.length}`);
+    const duration = (Date.now() - startTime) / 1000;
+    console.log(`Completed fetching ${allSites.length} sites in ${duration} seconds`);
 
-    // Create paths using the complete list of sites
     return allSites.map(site => ({
       params: { website: site.domain },
       props: { domain: site.domain }

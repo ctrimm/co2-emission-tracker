@@ -71,7 +71,7 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
   }, [domain]);
 
   // Debug render
-  console.log('Render state:', { loading, error, siteData });
+  // console.log('Render state:', { loading, error, siteData });
 
   if (loading) {
     return (
