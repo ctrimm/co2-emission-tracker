@@ -12,17 +12,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: |
-          npm install @tgwf/co2
-          npm install puppeteer
-          npm install @supabase/supabase-js
-          npm install p-limit
+        run: pnpm install @tgwf/co2 puppeteer @supabase/supabase-js p-limit
 
       - name: Run CO2 Emissions Check
         run: node scripts/co2-emissions-check.js
