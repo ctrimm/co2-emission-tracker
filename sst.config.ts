@@ -1,4 +1,5 @@
 /// <reference path="./.sst/platform/config.d.ts" />
+
 export default $config({
   app(input) {
     return {
@@ -6,49 +7,25 @@ export default $config({
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
       providers: {
-        cloudflare: "5.40.1",
         aws: "6.56.0"
-      },
+      }
     };
   },
   async run() {
-    // -------------------------------------------------------------
-    // --------------------- Stage v. Prod -------------------------
-    // -------------------------------------------------------------
+    console.log('Running...');
 
-    // Set the subdomain based on the stage
-    const domainName = $app.stage === "production"
-      ? "websiteweight.com"
-      : `${$app.stage}.websiteweight.com"`;
+    // Create secrets
+    const supabaseUrl = new sst.Secret("MySupabaseUrl", process.env.PUBLIC_SUPABASE_URL);
+    const supabaseAnonKey = new sst.Secret("MySupabaseAnonRoleKey", process.env.PUBLIC_SUPABASE_ANON_KEY);
 
-    // -------------------------------------------------------------
-    // ---------------------- SECRETS SETUP ------------------------
-    // -------------------------------------------------------------
-    const supabaseServiceRoleKey = new sst.Secret("SupabaseServiceRoleKey", "my-secret-placeholder-value");
-    // const resendAPIKey = new sst.Secret("ResendAPIKey", "my-secret-placeholder-value");
-    // const stripePublicKey = new sst.Secret("StripePublicKey", "my-secret-placeholder-value");
-    // const stripeSecretKey = new sst.Secret("StripeSecretKey", "my-secret-placeholder-value");
-    // const stripeWebhookSecret = new sst.Secret("StripeWebhookSecret", "my-secret-placeholder-value");
-
-    // -------------------------------------------------------------
-    // ------------------- NEXT.JS FRONTEND ------------------------
-    // -------------------------------------------------------------
-
-    const websiteWeightWebApp = new sst.aws.Nextjs("WebsiteWeightWebApp", {
-      link: [
-        supabaseServiceRoleKey,
-      ],
-      domain: {
-        name: domainName,
-        redirects: ["www." + domainName],
-        dns: sst.cloudflare.dns()
-      },
-      environment: {
-        // STAGE: $app.stage,
-        ENVIRONMENT: "production",
-        NEXT_PUBLIC_POSTHOG_KEY: 'phc_3NEdMf34RjV6vG78Kj5FidWqmT6yR1ujg0YISYZt06v',
-        NEXT_PUBLIC_POSTHOG_HOST: 'https://us.i.posthog.com',
-      },
+    // Create the API Gateway with linked secrets
+    const api = new sst.aws.ApiGatewayV2("EmissionsApi", {
+      link: [supabaseUrl, supabaseAnonKey]
     });
-  },
+
+    // Define routes for emissions data
+    api.route("GET /emissions", "packages/functions/src/emissions.handler");
+    api.route("GET /emissions/{domain}", "packages/functions/src/domainEmissions.handler");
+    api.route("GET /sites", "packages/functions/src/sites.handler");
+  }
 });

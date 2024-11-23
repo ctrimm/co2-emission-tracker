@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { useState, useEffect } from 'react';
 import { AreaChartWrapper } from "./ui/wrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+import { fetchDomainEmissions } from '@/lib/api';
 
 interface WebsiteStatsProps {
   domain: string;
@@ -46,37 +47,15 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
         setLoading(true);
         setError(null);
         
-        const { data, error: supabaseError } = await supabase
-          .from('monitored_sites')
-          .select(`
-            industry,
-            domain_type,
-            website_emissions!inner (
-              date,
-              estimated_co2_grams,
-              is_green,
-              total_bytes
-            )
-          `)
-          .eq('domain', domain)
-          .order('date', { foreignTable: 'website_emissions', ascending: false })
-          .limit(7, { foreignTable: 'website_emissions' })
-          .single();
+        const { siteData, totalScans } = await fetchDomainEmissions(domain);
         
-        // Get total count in a separate query
-        const { data: countData, count: totalScanCount } = await supabase
-          .from('website_emissions')
-          .select('*', { count: 'exact', head: true })
-          .eq('domain', domain);
-
         if (!isMounted) return;
-
-        if (supabaseError) throw new Error(supabaseError.message);
-        if (!data) throw new Error('No data found for this website');
-        if (!data.website_emissions?.length) throw new Error('No emissions data found');
         
-        setSiteData(data);
-        setTotalScanCount(totalScanCount || 0);  // Set the total count
+        if (!siteData) throw new Error('No data found for this website');
+        if (!siteData.website_emissions?.length) throw new Error('No emissions data found');
+        
+        setSiteData(siteData);
+        setTotalScanCount(totalScans);
       } catch (e) {
         if (!isMounted) return;
         setError(e instanceof Error ? e.message : 'An unexpected error occurred');
@@ -87,13 +66,8 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
       }
     }
 
-    if (domain) {
-      fetchData();
-    }
-
-    return () => {
-      isMounted = false;
-    };
+    fetchData();
+    return () => { isMounted = false; };
   }, [domain]);
 
   // Debug render

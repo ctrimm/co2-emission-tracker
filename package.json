@@ -14,7 +14,11 @@
     "build": "NODE_OPTIONS=\"--max-old-space-size=8192\" astro build",
     "preview": "node scripts/preview.mjs",
     "astro": "astro",
-    "migrate": "tsx scripts/migration/migrate-to-supabase.ts"
+    "migrate": "tsx scripts/migration/migrate-to-supabase.ts",
+    "sst:dev": "sst dev",
+    "sst:build": "sst build",
+    "sst:deploy": "sst deploy",
+    "sst:remove": "sst remove"
   },
   "dependencies": {
     "@astrojs/mdx": "^2.1.1",
@@ -24,6 +28,7 @@
     "@astrojs/sitemap": "^3.1.5",
     "@astrojs/tailwind": "^5.1.0",
     "@astrojs/vercel": "^6.1.0",
+    "@aws-sdk/client-dynamodb": "^3.699.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -35,6 +40,7 @@
     "@supabase/supabase-js": "^2.46.1",
     "@tanstack/react-table": "^8.12.0",
     "@tgwf/co2": "^0.14.3",
+    "@types/aws-lambda": "^8.10.145",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
     "astro": "^4.3.0",
@@ -51,12 +57,15 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.12.1",
+    "sst": "^3.3.27",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^22.9.2",
     "mdast-util-toc": "^7.0.0",
     "remark": "^15.0.1",
     "tsx": "^4.19.2",

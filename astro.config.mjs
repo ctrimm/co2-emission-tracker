@@ -29,7 +29,7 @@ export default defineConfig({
   },
   // base: '/co2-emission-tracker/',
   trailingSlash: 'never',
-  output: 'static',
+  output: 'hybrid',
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',

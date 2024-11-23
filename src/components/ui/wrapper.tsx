@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { columns, type Emission } from "../emission/columns"
 import { DataTable } from "./data-table"
-import { supabase } from "@/lib/supabase";
+import { fetchEmissions } from "@/lib/api";
 import {
   AreaChart,
   Area,
@@ -34,19 +34,16 @@ interface AreaWrapperProps {
 const TableWrapper = (props: WrapperProps) => {
   const [data, setData] = useState<Emission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data: emissions, error } = await supabase
-          .from('website_emissions')
-          .select('*')
-          .order('date', { ascending: false });
-
-        if (error) throw error;
+        const { emissions } = await fetchEmissions();
         setData(emissions || []);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setError(error instanceof Error ? error.message : 'Failed to fetch emissions data');
       } finally {
         setLoading(false);
       }
@@ -56,6 +53,7 @@ const TableWrapper = (props: WrapperProps) => {
   }, []);
 
   if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="container mx-auto py-4">
