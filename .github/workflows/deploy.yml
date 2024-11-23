@@ -51,19 +51,19 @@ jobs:
           CI: true
 
       - name: List build output
-        run: ls -la dist/  # This will help debug what files are actually being built
+        run: ls -la dist/client/  # This will help debug what files are actually being built
 
-      - name: Fix permissions
-        run: |
-          chmod -c -R +rX "_site/" | while read line; do
-            echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done
+      # - name: Fix permissions
+      #   run: |
+      #     chmod -c -R +rX "_site/" | while read line; do
+      #       echo "::warning title=Invalid file permissions automatically fixed::$line"
+      #     done
 
       - name: Upload Artifact for Deployment
         uses: actions/upload-pages-artifact@v3
         with:
           name: github-pages
-          path: ./dist
+          path: ./dist/client
 
   deploy:
     needs: build
