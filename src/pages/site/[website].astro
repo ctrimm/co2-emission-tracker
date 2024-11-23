@@ -6,14 +6,14 @@ import { createClient } from '@supabase/supabase-js';
 // Mark this page for static generation
 export const prerender = true;
 
+// Create Supabase client inside the function
+const supabase = createClient(
+  import.meta.env.NEXT_PUBLIC_SUPABASE_URL,
+  import.meta.env.SUPABASE_SERVICE_ROLE_KEY
+);
+
 // Generate static paths for all monitored websites
 export async function getStaticPaths() {
-  // Create Supabase client inside the function
-  const supabase = createClient(
-    import.meta.env.NEXT_PUBLIC_SUPABASE_URL,
-    import.meta.env.SUPABASE_SERVICE_ROLE_KEY
-  );
-
   try {
     // Method 2: Use pagination to get all sites
     let allSites = [];
