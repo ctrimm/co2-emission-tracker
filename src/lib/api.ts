@@ -8,6 +8,14 @@ export async function fetchEmissions() {
   return response.json();
 }
 
+export async function fetchUniqueEmissions() {
+  const response = await fetch(`${API_URL}/emissions-unique`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch unique emissions');
+  }
+  return response.json();
+}
+
 export async function fetchDomainEmissions(domain: string) {
   const response = await fetch(`${API_URL}/emissions/${domain}`);
   if (!response.ok) {

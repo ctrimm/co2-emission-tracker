@@ -1,11 +1,11 @@
 ---
-export const prerender = true;
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import MainLayout from "@/layouts/main-layout.astro";
 import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
 import { TableWrapper } from "@/components/ui/wrapper";
+import { fetchUniqueEmissions, fetchSites } from "@/lib/api";
 import {
   Card,
   CardContent,
@@ -18,23 +18,29 @@ import {
 // Get today's date in YYYY-MM-DD format
 const today = new Date().toISOString().split('T')[0];
 
-// Fetch data from our API endpoints
-const [emissionsResponse, sitesResponse] = await Promise.all([
-  fetch(`${import.meta.env.PUBLIC_API_URL}/emissions`),
-  fetch(`${import.meta.env.PUBLIC_API_URL}/sites`)
-]);
+// Fetch data using our API helpers
+let todaysEmissions = [];
+let totalIndexesRun = 0;
+let uniqueSiteCount = 0;
 
-if (!emissionsResponse.ok || !sitesResponse.ok) {
-  throw new Error('Failed to fetch data');
+try {
+  // Fetch unique emissions and sites data in parallel
+  const [emissionsData, sitesData] = await Promise.all([
+    fetchUniqueEmissions(),
+    fetchSites()
+  ]);
+
+  todaysEmissions = emissionsData.emissions || [];
+  totalIndexesRun = emissionsData.count || 0;
+  uniqueSiteCount = sitesData.count || 0;
+} catch (error) {
+  console.error('Error fetching data:', error);
 }
 
-const { emissions: todaysEmissions, count: totalIndexesRun } = await emissionsResponse.json();
-const { sites, count: uniqueSiteCount } = await sitesResponse.json();
-
-const formattedCount = new Intl.NumberFormat('en-US').format(uniqueSiteCount || 0);
+const formattedCount = new Intl.NumberFormat('en-US').format(uniqueSiteCount);
 
 // Calculate averages from today's data
-const averageGramsPerLoad = todaysEmissions && todaysEmissions.length > 0
+const averageGramsPerLoad = todaysEmissions.length > 0
   ? todaysEmissions.reduce((acc, cur) => acc + (cur.estimated_co2_grams || 0), 0) / todaysEmissions.length
   : 0;
 

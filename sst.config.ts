@@ -25,6 +25,7 @@ export default $config({
 
     // Define routes for emissions data
     api.route("GET /emissions", "packages/functions/src/emissions.handler");
+    api.route("GET /emissions-unique", "packages/functions/src/emissions-unique.handler");
     api.route("GET /emissions/{domain}", "packages/functions/src/domainEmissions.handler");
     api.route("GET /sites", "packages/functions/src/sites.handler");
   }
