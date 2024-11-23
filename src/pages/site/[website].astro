@@ -9,8 +9,8 @@ export const prerender = true;
 // Generate static paths for all monitored websites
 export async function getStaticPaths() {
   const supabase = createClient(
-    import.meta.env.PUBLIC_SUPABASE_URL,
-    import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+    import.meta.env.NEXT_PUBLIC_SUPABASE_URL,
+    import.meta.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
   try {
