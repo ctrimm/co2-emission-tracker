@@ -3,14 +3,6 @@ if (!API_URL) {
   throw new Error('PUBLIC_API_URL environment variable is not set. Check your .env file or GitHub Actions secrets.');
 }
 
-export async function fetchEmissions() {
-  const response = await fetch(`${API_URL}/emissions`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch emissions');
-  }
-  return response.json();
-}
-
 export async function fetchUniqueEmissions() {
   const response = await fetch(`${API_URL}/emissions-unique`);
   if (!response.ok) {
@@ -19,8 +11,8 @@ export async function fetchUniqueEmissions() {
   return response.json();
 }
 
-export async function fetchDomainEmissions(domain: string) {
-  const response = await fetch(`${API_URL}/emissions/${domain}`);
+export async function fetchDomainEmissions(domain: string, limit = 30) {
+  const response = await fetch(`${API_URL}/emissions/${domain}?limit=${limit}`);
   if (!response.ok) {
     throw new Error('Failed to fetch domain emissions');
   }

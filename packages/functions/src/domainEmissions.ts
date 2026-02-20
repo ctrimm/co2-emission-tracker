@@ -17,6 +17,11 @@ export async function handler(event) {
     };
   }
 
+  // ?limit= controls how many historical scans are returned for the chart.
+  // Default 30 (one month), capped at 90 to keep response sizes reasonable.
+  const rawLimit = event.queryStringParameters?.limit;
+  const limit = Math.min(Math.max(parseInt(rawLimit || '30', 10) || 30, 1), 90);
+
   try {
     // Get site data and emissions count in parallel
     const [siteData, emissionsCount] = await Promise.all([
@@ -34,7 +39,7 @@ export async function handler(event) {
         `)
         .eq('domain', domain)
         .order('date', { foreignTable: 'website_emissions', ascending: false })
-        .limit(7, { foreignTable: 'website_emissions' })
+        .limit(limit, { foreignTable: 'website_emissions' })
         .single(),
       
       supabase
