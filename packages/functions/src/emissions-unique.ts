@@ -11,19 +11,32 @@ const supabase = createClient(
 export async function handler(_evt) {
   try {
     // First, get the total count of monitored sites
-    const { data, count: totalSites } = await supabase
+    const { count: totalSites } = await supabase
       .from('monitored_sites')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true);
 
-    // Get the latest emission for each unique domain
+    // Get the most recent date that has emission data.
+    // The cron job uses upsert with onConflict: 'date,domain', so there is
+    // exactly one row per domain per date — fetching all rows for the latest
+    // date gives us one unique record per domain without any GROUP BY magic.
+    const { data: latestDateRow, error: dateError } = await supabase
+      .from('website_emissions')
+      .select('date')
+      .order('date', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (dateError) throw dateError;
+
+    const latestDate = latestDateRow?.date;
+
     const { data: emissions, error, count } = await supabase
       .from('website_emissions')
       .select('*', { count: 'exact' })
-      .order('date', { ascending: false })
-      .limit(1)
-      .or('domain.not.is.null')
-      .limit(totalSites || 20000); // Adjust limit as needed
+      .eq('date', latestDate)
+      .order('domain', { ascending: true })
+      .limit(totalSites || 20000);
 
     if (error) throw error;
 

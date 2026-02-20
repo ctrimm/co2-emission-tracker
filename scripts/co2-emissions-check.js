@@ -39,17 +39,26 @@ async function logError(url, errorType, errorMessage, severity = 'error', detail
 async function getPageDataSize(url) {
   let browser;
   try {
-    browser = await puppeteer.launch({ 
-      headless: true, 
-      args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
     let totalBytes = 0;
 
+    // Buffer each response body to get its actual byte length.
+    // Relying solely on the content-length header misses chunked transfer
+    // encoding responses (the majority of modern sites), which return 0.
     page.on('response', async (response) => {
-      const headers = response.headers();
-      if (headers['content-length']) {
-        totalBytes += parseInt(headers['content-length'], 10);
+      try {
+        const buffer = await response.buffer();
+        totalBytes += buffer.length;
+      } catch {
+        // Some responses (e.g. streams, aborted) cannot be buffered — skip them.
+        const headers = response.headers();
+        if (headers['content-length']) {
+          totalBytes += parseInt(headers['content-length'], 10);
+        }
       }
     });
 

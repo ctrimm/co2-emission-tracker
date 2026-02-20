@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { columns, type Emission } from "../emission/columns"
 import { DataTable } from "./data-table"
-import { fetchEmissions } from "@/lib/api";
+import { fetchUniqueEmissions } from "@/lib/api";
 import {
   AreaChart,
   Area,
@@ -39,7 +39,7 @@ const TableWrapper = (props: WrapperProps) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { emissions } = await fetchEmissions();
+        const { emissions } = await fetchUniqueEmissions();
         setData(emissions || []);
       } catch (error) {
         console.error('Error fetching data:', error);
