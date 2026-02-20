@@ -119,7 +119,7 @@ function estimateEmissions(bytes, isGreen) {
 async function processDomain(site) {
   try {
     const isGreen = await checkGreenHosting(site.domain);
-    const totalBytes = await getPageDataSize(`http://${site.domain}`);
+    const totalBytes = await getPageDataSize(`https://${site.domain}`);
     const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
     
     const record = {
