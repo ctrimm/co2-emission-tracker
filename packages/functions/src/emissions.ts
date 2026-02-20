@@ -8,11 +8,13 @@ const supabase = createClient(
 
 export async function handler(_evt) {
   try {
-    // Get all emissions data, ordered by date
+    // Get the most recent emissions, capped to prevent unbounded response sizes.
+    // At ~1000 sites/day this covers over a week of data.
     const { data: emissions, error, count } = await supabase
       .from('website_emissions')
       .select('*', { count: 'exact' })
-      .order('date', { ascending: false });
+      .order('date', { ascending: false })
+      .limit(5000);
 
     if (error) throw error;
 

@@ -65,7 +65,10 @@ async function getPageDataSize(url) {
       }
     });
 
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 10000 });
+    // networkidle2 waits until no more than 2 in-flight requests for 500ms,
+    // giving async resources (images, fonts, scripts) time to load and be
+    // counted. 30s timeout is generous enough for slow government sites.
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
     return totalBytes;
   } catch (error) {
     await logError(
