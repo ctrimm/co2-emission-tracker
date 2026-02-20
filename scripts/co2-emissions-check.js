@@ -4,10 +4,13 @@ import pLimit from 'p-limit';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const supabaseUrl = process.env.PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Missing required environment variables: PUBLIC_SUPABASE_URL and/or SUPABASE_SERVICE_ROLE_KEY');
+  process.exit(1);
+}
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Limit concurrent operations
 const limit = pLimit(10);
@@ -173,16 +176,30 @@ async function processSites() {
 
     if (dailyError) throw dailyError;
 
-    // Get weekly sites for current day
-    // Using PostgreSQL's EXTRACT(DOW FROM NOW()) for day of week
-    const { data: weeklySites, error: weeklyError } = await supabase
+    // Get weekly sites for current day.
+    // Rather than relying on an optional check_day column, we distribute sites
+    // deterministically across days of the week using a hash of the domain name.
+    // This guarantees each weekly site is scanned on exactly one day per week
+    // without requiring any additional database schema changes.
+    const { data: allWeeklySites, error: weeklyError } = await supabase
       .from('monitored_sites')
       .select('*')
       .eq('is_active', true)
-      .eq('monitoring_frequency', 'weekly')
-      .eq('check_day', dayOfWeek); // Assuming we have a check_day column
+      .eq('monitoring_frequency', 'weekly');
 
     if (weeklyError) throw weeklyError;
+
+    function getDayForDomain(domain) {
+      let hash = 0;
+      for (let i = 0; i < domain.length; i++) {
+        hash = (hash * 31 + domain.charCodeAt(i)) & 0x7fffffff;
+      }
+      return hash % 7;
+    }
+
+    const weeklySites = (allWeeklySites || []).filter(
+      site => getDayForDomain(site.domain) === dayOfWeek
+    );
 
     // Combine the results
     const sites = [...(dailySites || []), ...(weeklySites || [])];

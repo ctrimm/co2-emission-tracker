@@ -124,8 +124,8 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
   const trendArrow = trend > 5 ? '↑' : trend < -5 ? '↓' : '--';
   const trendSubText = trend > 5 ? 'up' : trend < -5 ? 'down' : 'relatively flat';
 
-  // Coffee calculation
-  const co2EmissionsPerCupOfCoffee = 400;
+  // Coffee calculation — 21g CO2 per cup (approx 0.021kg, matching columns.tsx)
+  const co2EmissionsPerCupOfCoffee = 21;
   const pageViews = 1_000_000;
   const cupsOfCoffee = (averageGramsPerLoad / co2EmissionsPerCupOfCoffee) * pageViews;
 
