@@ -5,8 +5,49 @@ import { Skeleton } from "./ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 import { fetchDomainEmissions } from '@/lib/api';
+
+// Approximate average CO2 per page view (grams) by industry.
+// Based on the Sustainable Web Design methodology and Website Carbon benchmarks.
+// The global average (~0.5 g) is used as the fallback for unknown industries.
+const INDUSTRY_AVERAGES: Record<string, number> = {
+  'government':  0.60,
+  'federal':     0.60,
+  'state':       0.60,
+  'local':       0.55,
+  'municipal':   0.55,
+  'education':   0.40,
+  'university':  0.40,
+  'healthcare':  0.50,
+  'health':      0.50,
+  'finance':     0.40,
+  'financial':   0.40,
+  'banking':     0.40,
+  'technology':  0.30,
+  'tech':        0.30,
+  'media':       0.80,
+  'news':        0.80,
+  'publishing':  0.75,
+  'retail':      0.70,
+  'ecommerce':   0.70,
+  'nonprofit':   0.40,
+  'non-profit':  0.40,
+};
+
+function getIndustryAverage(industry: string | null): number {
+  if (!industry) return 0.5;
+  const key = industry.toLowerCase();
+  if (INDUSTRY_AVERAGES[key] !== undefined) return INDUSTRY_AVERAGES[key];
+  for (const [k, v] of Object.entries(INDUSTRY_AVERAGES)) {
+    if (key.includes(k)) return v;
+  }
+  return 0.5;
+}
+
+const LIMIT_OPTIONS = [7, 30, 90] as const;
+type Limit = typeof LIMIT_OPTIONS[number];
 
 interface WebsiteStatsProps {
   domain: string;
@@ -30,6 +71,7 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
   const [totalScanCount, setTotalScanCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [limit, setLimit] = useState<Limit>(30);
 
   // Time since midnight calculation
   const now = new Date();
@@ -46,14 +88,14 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
       try {
         setLoading(true);
         setError(null);
-        
-        const { siteData, totalScans } = await fetchDomainEmissions(domain);
-        
+
+        const { siteData, totalScans } = await fetchDomainEmissions(domain, limit);
+
         if (!isMounted) return;
-        
+
         if (!siteData) throw new Error('No data found for this website');
         if (!siteData.website_emissions?.length) throw new Error('No emissions data found');
-        
+
         setSiteData(siteData);
         setTotalScanCount(totalScans);
       } catch (e) {
@@ -68,10 +110,7 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
 
     fetchData();
     return () => { isMounted = false; };
-  }, [domain]);
-
-  // Debug render
-  // console.log('Render state:', { loading, error, siteData });
+  }, [domain, limit]);
 
   if (loading) {
     return (
@@ -108,15 +147,14 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
   const totalScans = siteData.website_emissions.length;
 
   // Calculate averages
-  const averageGramsPerLoad = siteData.website_emissions.reduce((acc, cur) => 
+  const averageGramsPerLoad = siteData.website_emissions.reduce((acc, cur) =>
     acc + (cur.estimated_co2_grams || 0), 0) / totalScans;
 
-  const averageBytesPerLoad = siteData.website_emissions.reduce((acc, cur) => 
+  const averageBytesPerLoad = siteData.website_emissions.reduce((acc, cur) =>
     acc + (cur.total_bytes || 0), 0) / totalScans;
   const averageMBPerLoad = averageBytesPerLoad / 1048576;
 
-  // Industry comparison (placeholder - replace with actual industry data)
-  const industryAverageCO2 = 0.5;
+  const industryAverageCO2 = getIndustryAverage(siteData.industry);
   const co2Difference = ((averageGramsPerLoad - industryAverageCO2) / industryAverageCO2) * 100;
 
   // Trend calculation
@@ -174,7 +212,7 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
         'text-emerald-500': co2Difference < 0,
         'text-red-500': co2Difference >= 0,
       }),
-      footer: "from industry avg."
+      footer: `vs. ${industryAverageCO2.toFixed(2)} g ${siteData.industry || 'industry'} avg.`
     },
     {
       title: "# of Coffees",
@@ -186,14 +224,14 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
   // Chart data transformation
   const chartData = siteData.website_emissions
     .map((scan) => ({
-      date: new Date(scan.date).toLocaleDateString('en-US', { 
-        month: 'short', 
+      date: new Date(scan.date).toLocaleDateString('en-US', {
+        month: 'short',
         day: 'numeric',
         year: 'numeric'
       }),
       name: 'Scan',
       co2: Number(scan.estimated_co2_grams) || 0,
-      industryAverageCo2: industryAverageCO2  // Changed from industryAverageCO2 to match interface
+      industryAverageCo2: industryAverageCO2
     }))
     .reverse();
 
@@ -217,8 +255,20 @@ export function WebsiteStats({ domain }: WebsiteStatsProps) {
       {/* Chart */}
       <div className="mx-auto max-w-[64rem] pt-8">
         <Card>
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Last {totalScans} scans</CardTitle>
+            <div className="flex gap-1">
+              {LIMIT_OPTIONS.map(n => (
+                <Button
+                  key={n}
+                  size="sm"
+                  variant={limit === n ? "default" : "outline"}
+                  onClick={() => setLimit(n)}
+                >
+                  {n}d
+                </Button>
+              ))}
+            </div>
           </CardHeader>
           <CardContent>
             <AreaChartWrapper client:load data={chartData} />
