@@ -26,3 +26,27 @@ export async function fetchSites() {
   }
   return response.json();
 }
+
+export async function fetchStats() {
+  const response = await fetch(`${API_URL}/stats`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch stats');
+  }
+  return response.json();
+}
+
+export async function fetchTrend(days = 30) {
+  const response = await fetch(`${API_URL}/trend?days=${days}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch trend');
+  }
+  return response.json();
+}
+
+export async function fetchLeaderboard() {
+  const response = await fetch(`${API_URL}/leaderboard`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch leaderboard');
+  }
+  return response.json();
+}

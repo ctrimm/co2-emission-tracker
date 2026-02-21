@@ -1,0 +1,123 @@
+---
+import MainLayout from "@/layouts/main-layout.astro";
+import { fetchLeaderboard } from "@/lib/api";
+
+let leaderboard: {
+  date: string;
+  cleanest: { domain: string; estimated_co2_grams: number; is_green: boolean; total_bytes: number }[];
+  heaviest: { domain: string; estimated_co2_grams: number; is_green: boolean; total_bytes: number }[];
+} = { date: '', cleanest: [], heaviest: [] };
+
+try {
+  leaderboard = await fetchLeaderboard();
+} catch (error) {
+  console.error('Error fetching leaderboard:', error);
+}
+---
+
+<MainLayout title="Leaderboard — CO2 Web Emissions Tracker">
+  <section class="container py-12 md:py-20">
+    <div class="mx-auto max-w-[58rem] flex flex-col items-center text-center gap-4 pb-10">
+      <h1 class="font-heading text-4xl font-bold sm:text-5xl">
+        Leaderboard
+      </h1>
+      <p class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+        The cleanest and heaviest sites from the most recent nightly scan
+        {leaderboard.date ? <span class="font-medium">({leaderboard.date})</span> : ''}.
+        CO2 is measured in grams per page view.
+      </p>
+    </div>
+
+    {leaderboard.cleanest.length === 0 && leaderboard.heaviest.length === 0 ? (
+      <p class="text-center text-muted-foreground">No data available yet.</p>
+    ) : (
+      <div class="mx-auto max-w-[64rem] grid gap-10 md:grid-cols-2">
+
+        <!-- Cleanest -->
+        <div>
+          <h2 class="font-heading text-2xl font-bold text-center mb-4 text-emerald-500">
+            ♻️ Top 10 Cleanest
+          </h2>
+          <div class="rounded-lg border overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-muted/50">
+                <tr>
+                  <th class="py-2 px-4 text-left font-medium w-8">#</th>
+                  <th class="py-2 px-4 text-left font-medium">Domain</th>
+                  <th class="py-2 px-4 text-right font-medium">CO2 (g)</th>
+                  <th class="py-2 px-4 text-center font-medium">Green</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboard.cleanest.map((site, i) => (
+                  <tr class="border-t hover:bg-muted/30 transition-colors">
+                    <td class="py-2 px-4 text-muted-foreground">{i + 1}</td>
+                    <td class="py-2 px-4">
+                      <a
+                        href={`/site/${site.domain}`}
+                        class="text-gradient_sky-emerald underline underline-offset-4 font-medium"
+                      >
+                        {site.domain}
+                      </a>
+                    </td>
+                    <td class="py-2 px-4 text-right font-mono text-emerald-500">
+                      {site.estimated_co2_grams.toFixed(3)}
+                    </td>
+                    <td class="py-2 px-4 text-center">
+                      {site.is_green
+                        ? <span class="text-emerald-500 font-bold">✓</span>
+                        : <span class="text-muted-foreground">✗</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Heaviest -->
+        <div>
+          <h2 class="font-heading text-2xl font-bold text-center mb-4 text-red-500">
+            🏭 Top 10 Heaviest
+          </h2>
+          <div class="rounded-lg border overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-muted/50">
+                <tr>
+                  <th class="py-2 px-4 text-left font-medium w-8">#</th>
+                  <th class="py-2 px-4 text-left font-medium">Domain</th>
+                  <th class="py-2 px-4 text-right font-medium">CO2 (g)</th>
+                  <th class="py-2 px-4 text-center font-medium">Green</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboard.heaviest.map((site, i) => (
+                  <tr class="border-t hover:bg-muted/30 transition-colors">
+                    <td class="py-2 px-4 text-muted-foreground">{i + 1}</td>
+                    <td class="py-2 px-4">
+                      <a
+                        href={`/site/${site.domain}`}
+                        class="underline underline-offset-4 font-medium text-red-400 hover:text-red-500"
+                      >
+                        {site.domain}
+                      </a>
+                    </td>
+                    <td class="py-2 px-4 text-right font-mono text-red-400">
+                      {site.estimated_co2_grams.toFixed(3)}
+                    </td>
+                    <td class="py-2 px-4 text-center">
+                      {site.is_green
+                        ? <span class="text-emerald-500 font-bold">✓</span>
+                        : <span class="text-muted-foreground">✗</span>}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    )}
+  </section>
+</MainLayout>

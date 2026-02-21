@@ -37,5 +37,8 @@ export default $config({
     api.route("GET /emissions-unique", "packages/functions/src/emissions-unique.handler");
     api.route("GET /emissions/{domain}", "packages/functions/src/domainEmissions.handler");
     api.route("GET /sites", "packages/functions/src/sites.handler");
+    api.route("GET /stats", "packages/functions/src/stats.handler");
+    api.route("GET /trend", "packages/functions/src/trend.handler");
+    api.route("GET /leaderboard", "packages/functions/src/leaderboard.handler");
   }
 });

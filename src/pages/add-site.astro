@@ -1,0 +1,22 @@
+---
+import MainLayout from "@/layouts/main-layout.astro";
+import { SubmitSiteForm } from "@/components/SubmitSiteForm";
+---
+
+<MainLayout title="Add a Site — CO2 Web Emissions Tracker">
+  <section class="container py-12 md:py-20">
+    <div class="mx-auto max-w-[58rem] flex flex-col items-center text-center gap-4 pb-10">
+      <h1 class="font-heading text-4xl font-bold sm:text-5xl">
+        Add a Site
+      </h1>
+      <p class="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+        Know a government or public-sector site that should be tracked?
+        Fill out the form below and we'll review it for inclusion.
+        We focus on federal, state, and local government websites but consider
+        any publicly accessible site.
+      </p>
+    </div>
+
+    <SubmitSiteForm client:load />
+  </section>
+</MainLayout>
