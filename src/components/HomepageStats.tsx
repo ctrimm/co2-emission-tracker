@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchStats, fetchTrend } from '@/lib/api';
+import { IndustryBreakdown } from '@/components/IndustryBreakdown';
 import {
   Card,
   CardContent,
@@ -119,6 +120,9 @@ export function HomepageStats() {
           )}
         </div>
       </section>
+
+      {/* Industry Breakdown */}
+      <IndustryBreakdown />
     </>
   );
 }

@@ -37,5 +37,6 @@ export default $config({
     api.route("GET /stats", "packages/functions/src/stats.handler");
     api.route("GET /trend", "packages/functions/src/trend.handler");
     api.route("GET /leaderboard", "packages/functions/src/leaderboard.handler");
+    api.route("GET /industry-stats", "packages/functions/src/industryStats.handler");
   }
 });

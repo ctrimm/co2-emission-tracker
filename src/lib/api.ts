@@ -50,3 +50,11 @@ export async function fetchLeaderboard() {
   }
   return response.json();
 }
+
+export async function fetchIndustryStats() {
+  const response = await fetch(`${API_URL}/industry-stats`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch industry stats');
+  }
+  return response.json();
+}
