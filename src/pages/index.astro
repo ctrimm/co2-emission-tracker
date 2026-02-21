@@ -4,92 +4,28 @@ import { siteConfig } from "@/config/site";
 import MainLayout from "@/layouts/main-layout.astro";
 import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
-import { TableWrapper, AreaChartWrapper } from "@/components/ui/wrapper";
-import { fetchStats, fetchTrend } from "@/lib/api";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { TableWrapper } from "@/components/ui/wrapper";
+import { fetchStats } from "@/lib/api";
+import { HomepageStats } from "@/components/HomepageStats";
 
-// Fetch pre-aggregated stats and 30-day trend in parallel.
-// This replaces the previous approach of downloading all emissions rows
-// just to compute three numbers on the client.
-let stats = {
-  totalActiveSites: 0,
-  totalIndexesRun: 0,
-  averageCO2Grams: 0,
-  greenHostedPercent: 0,
-  latestScanDate: '',
-};
-let trendChartData: { date: string; name: string; co2: number; industryAverageCo2: number }[] = [];
-
+// Fetch only the active-site count used in the hero text.
+// Quick Glance metrics and the 30-day trend chart are now loaded client-side
+// via <HomepageStats> so they always reflect live data rather than the
+// snapshot baked in at build time.
+let totalActiveSites = 0;
 try {
-  const [statsData, trendData] = await Promise.all([fetchStats(), fetchTrend()]);
-  stats = statsData;
-  trendChartData = (trendData.trend || []).map((point: { date: string; averageCO2: number }) => ({
-    date: point.date,
-    name: 'Daily Average',
-    co2: point.averageCO2,
-    industryAverageCo2: 0.5, // global average reference line
-  }));
+  const statsData = await fetchStats();
+  totalActiveSites = statsData?.totalActiveSites ?? 0;
 } catch (error) {
-  console.error('Error fetching data:', error);
+  console.error('Error fetching site count:', error);
 }
 
-const formattedCount = new Intl.NumberFormat('en-US').format(stats.totalActiveSites);
-
-// Time since midnight EST
-const now = new Date();
-const estNow = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
-const midnightEst = new Date(estNow);
-midnightEst.setHours(0, 0, 0, 0);
-const diffHours = Math.floor((Number(now) - Number(midnightEst)) / 1000 / 60 / 60);
-const timeSinceMidnight = `~${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
-
-function formatNumber(num: number) {
-  if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + 'MM+';
-  } else if (num >= 1000) {
-    return (num / 1000).toFixed(1) + 'k+';
-  } else {
-    return num;
-  }
-}
-
-const summaryCardInfo = [
-  {
-    cardTitle: "Total Indexes Run",
-    cardContent: formatNumber(stats.totalIndexesRun),
-    cardFooter: timeSinceMidnight,
-  },
-  {
-    cardTitle: "Average CO2",
-    cardContent: `${stats.averageCO2Grams.toFixed(3)} g`,
-    cardFooter: "per 1 view",
-  },
-  {
-    cardTitle: "% Green Hosted",
-    cardContent: `${stats.greenHostedPercent.toFixed(2)}%`,
-    cardFooter: "of indexed sites",
-  },
-];
+const formattedCount = new Intl.NumberFormat('en-US').format(totalActiveSites);
 ---
 
 <MainLayout title="CO2 Web Emissions Tracker">
   <section class="space-y-6 pb-12 pt-16 lg:pt-28 lg:pb-12">
     <div class="container flex max-w-[64rem] flex-col items-center gap-5 text-center">
-      <a
-        href="https://twitter.com/cdt5058/status/1760840540378071176"
-        class={cn(buttonVariants({ variant: "outline", size: "sm" }))}
-        target="_blank"
-      >
-        Follow along on <Icon name="twitter" class="ml-2 size-4" />
-      </a>
-
       <h1 class="font-heading text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl !leading-[1.1] text-balance">
         A simple interface to display
         <span class="text-gradient_sky-emerald">
@@ -119,53 +55,8 @@ const summaryCardInfo = [
     </div>
   </section>
 
-  <!-- Scan Summary Section -->
-  <section
-  id="summary"
-  class="container py-8 md:py-12 lg:py-12"
->
-  <div
-    class="mx-auto flex flex-col items-center space-y-4 text-center"
-  >
-    <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
-      Quick Glance
-    </h2>
-  </div>
-  <div class="mx-auto max-w-[64rem] overflow-x-auto pt-8">
-    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 pt-4 pb-10">
-      {summaryCardInfo.map((card) => (
-        <Card className="hover:shadow hover:shadow-xl hover:shadow-emerald-500/50">
-          <CardHeader>
-            <CardTitle className="tracking-tight text-sm font-medium text-center">{card.cardTitle}</CardTitle>
-            {card.cardDescription ? <CardDescription>{(card.cardDescription)}</CardDescription> : ''}
-          </CardHeader>
-          <CardContent className={card.cardClass}>
-            <p class="text-6xl font-bold text-center">{card.cardContent}</p>
-          </CardContent>
-          <CardFooter>
-            <p class="m-auto text-xs text-muted-foreground text-center">{card.cardFooter}</p>
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
-  </div>
-</section>
-
-  <!-- 30-Day Trend Chart -->
-  <section id="trend" class="container py-8 md:py-12 lg:py-12">
-    <div class="mx-auto flex flex-col items-center space-y-4 text-center pb-8">
-      <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
-        30-Day Trend
-      </h2>
-      <p class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text">
-        Average CO2 per page view across all monitored sites. The lower line is the
-        0.5 g global industry average for reference.
-      </p>
-    </div>
-    <div class="mx-auto max-w-[64rem] rounded-lg border bg-background">
-      <AreaChartWrapper client:load data={trendChartData} />
-    </div>
-  </section>
+  <!-- Quick Glance + 30-Day Trend (fetched client-side for live data) -->
+  <HomepageStats client:load />
 
   <!-- Data Table Section + Text -->
   <section

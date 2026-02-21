@@ -15,7 +15,7 @@ import {
 } from "recharts";
 
 interface WrapperProps {
-  "client:load": boolean;
+  "client:load"?: boolean;
   domain?: string;
 }
 
@@ -27,7 +27,7 @@ interface ChartDataPoint {
 }
 
 interface AreaWrapperProps {
-  "client:load": boolean;
+  "client:load"?: boolean;
   data: ChartDataPoint[];
 }
 
