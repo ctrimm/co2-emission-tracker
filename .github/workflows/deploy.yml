@@ -23,9 +23,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Only run if the CO2 Emissions Check Cron Job completes successfully
-    # or if there is a merge into the main branch
-    # if: ${{ github.event.pull_request.merged == true || github.event.workflow_run.conclusion == 'success' }}
+    # Skip the build when triggered by a failed cron run.
+    # - push events (PR merges, direct commits to main) always deploy.
+    # - workflow_dispatch (manual trigger) always deploys.
+    # - workflow_run (after nightly cron) only deploys when the cron succeeded.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
