@@ -2,21 +2,17 @@
 /* tslint:disable */
 /* eslint-disable */
 /* deno-fmt-ignore-file */
-import "sst"
-export {}
+/* biome-ignore-all lint: auto-generated */
+
 declare module "sst" {
   export interface Resource {
     "EmissionsApi": {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
-    "MySupabaseAnonRoleKey": {
-      "type": "sst.sst.Secret"
-      "value": string
-    }
-    "MySupabaseUrl": {
-      "type": "sst.sst.Secret"
-      "value": string
-    }
   }
 }
+/// <reference path="sst-env.d.ts" />
+
+import "sst"
+export {}
