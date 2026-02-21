@@ -29,15 +29,26 @@ export async function handler(_evt) {
     const latestDate = latestDateRow.data?.date;
 
     // Fetch lightweight rows for the latest date to compute aggregates.
-    const { data: emissions, error } = await supabase
-      .from('website_emissions')
-      .select('estimated_co2_grams, is_green')
-      .eq('date', latestDate)
-      .limit(activeSitesResult.count || 20000);
+    // Supabase PostgREST caps responses at max_rows (commonly 1000), so we
+    // paginate in 1000-row pages until all rows are retrieved.
+    const PAGE_SIZE = 1000;
+    const allEmissions: { estimated_co2_grams: number; is_green: boolean }[] = [];
+    let from = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('website_emissions')
+        .select('estimated_co2_grams, is_green')
+        .eq('date', latestDate)
+        .range(from, from + PAGE_SIZE - 1);
+      if (error) throw error;
+      if (!data || data.length === 0) break;
+      allEmissions.push(...data);
+      if (data.length < PAGE_SIZE) break;
+      from += PAGE_SIZE;
+    }
+    const emissions = allEmissions;
 
-    if (error) throw error;
-
-    const totalIndexesRun = emissions?.length || 0;
+    const totalIndexesRun = emissions.length;
     const avgCO2 = totalIndexesRun > 0
       ? emissions.reduce((sum, e) => sum + (e.estimated_co2_grams || 0), 0) / totalIndexesRun
       : 0;

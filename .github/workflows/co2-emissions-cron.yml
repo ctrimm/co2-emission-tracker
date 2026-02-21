@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install @tgwf/co2 puppeteer @supabase/supabase-js p-limit
 
+      - name: Install Chrome for Puppeteer
+        run: npx puppeteer browsers install chrome
+
       - name: Run CO2 Emissions Check
         run: node scripts/co2-emissions-check.js
         env:

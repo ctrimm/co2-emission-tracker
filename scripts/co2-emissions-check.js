@@ -120,8 +120,14 @@ async function processDomain(site) {
   try {
     const isGreen = await checkGreenHosting(site.domain);
     const totalBytes = await getPageDataSize(`https://${site.domain}`);
+
+    if (totalBytes === 0) {
+      console.warn(`Skipping ${site.domain} - page could not be measured (0 bytes)`);
+      return;
+    }
+
     const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
-    
+
     const record = {
       date: getCurrentDate(),
       domain: site.domain,

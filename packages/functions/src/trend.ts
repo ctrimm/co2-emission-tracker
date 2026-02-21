@@ -17,20 +17,29 @@ export async function handler(event) {
     since.setDate(since.getDate() - days);
     const sinceStr = since.toISOString().split('T')[0];
 
-    // Fetch lightweight rows for the date range. At ~1 000 sites × 90 days
-    // this is at most ~90 000 rows with 3 small fields — manageable in Lambda.
-    const { data, error } = await supabase
-      .from('website_emissions')
-      .select('date, estimated_co2_grams, is_green')
-      .gte('date', sinceStr)
-      .order('date', { ascending: true })
-      .limit(100000);
-
-    if (error) throw error;
+    // Fetch lightweight rows for the date range. Supabase PostgREST caps
+    // responses at max_rows (commonly 1000), so we paginate until all rows
+    // for the requested window are collected.
+    const PAGE_SIZE = 1000;
+    const allData: { date: string; estimated_co2_grams: number; is_green: boolean }[] = [];
+    let from = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from('website_emissions')
+        .select('date, estimated_co2_grams, is_green')
+        .gte('date', sinceStr)
+        .order('date', { ascending: true })
+        .range(from, from + PAGE_SIZE - 1);
+      if (error) throw error;
+      if (!data || data.length === 0) break;
+      allData.push(...data);
+      if (data.length < PAGE_SIZE) break;
+      from += PAGE_SIZE;
+    }
 
     // Aggregate by date in Lambda.
     const byDate: Record<string, { sum: number; count: number; greenCount: number }> = {};
-    for (const row of data || []) {
+    for (const row of allData) {
       if (!byDate[row.date]) byDate[row.date] = { sum: 0, count: 0, greenCount: 0 };
       byDate[row.date].sum += row.estimated_co2_grams || 0;
       byDate[row.date].count++;
