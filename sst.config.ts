@@ -5,10 +5,7 @@ export default $config({
     return {
       name: "website-weight",
       removal: input?.stage === "production" ? "retain" : "remove",
-      home: "aws",
-      providers: {
-        aws: "6.56.0"
-      }
+      home: "aws"
     };
   },
   async run() {
