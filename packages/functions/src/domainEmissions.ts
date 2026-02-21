@@ -19,46 +19,58 @@ export async function handler(event) {
 
   // ?limit= controls how many historical scans are returned for the chart.
   // Default 30 (one month), capped at 90 to keep response sizes reasonable.
+  // NOTE: Using a direct query on website_emissions (not an embedded join) so that
+  // the limit is properly respected — Supabase's foreignTable limit in embedded
+  // queries is capped server-side at 7 regardless of the requested value.
   const rawLimit = event.queryStringParameters?.limit;
   const limit = Math.min(Math.max(parseInt(rawLimit || '30', 10) || 30, 1), 90);
 
   try {
-    // Get site data and emissions count in parallel
-    const [siteData, emissionsCount] = await Promise.all([
+    const [siteResult, emissionsResult, emissionsCount] = await Promise.all([
       supabase
         .from('monitored_sites')
-        .select(`
-          industry,
-          domain_type,
-          website_emissions!inner (
-            date,
-            estimated_co2_grams,
-            is_green,
-            total_bytes
-          )
-        `)
+        .select('industry, domain_type')
         .eq('domain', domain)
-        .order('date', { foreignTable: 'website_emissions', ascending: false })
-        .limit(limit, { foreignTable: 'website_emissions' })
         .single(),
-      
+
+      supabase
+        .from('website_emissions')
+        .select('date, estimated_co2_grams, is_green, total_bytes')
+        .eq('domain', domain)
+        .order('date', { ascending: false })
+        .limit(limit),
+
       supabase
         .from('website_emissions')
         .select('*', { count: 'exact', head: true })
-        .eq('domain', domain)
+        .eq('domain', domain),
     ]);
 
-    if (siteData.error) throw siteData.error;
+    // PGRST116 = no rows — domain not yet in monitored_sites, treat gracefully
+    if (siteResult.error && siteResult.error.code !== 'PGRST116') throw siteResult.error;
+    if (emissionsResult.error) throw emissionsResult.error;
+
+    if (!emissionsResult.data?.length) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({ error: 'No data found for this domain' }),
+        headers: { "Content-Type": "application/json" }
+      };
+    }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        siteData: siteData.data,
-        totalScans: emissionsCount.count
+        siteData: {
+          industry: siteResult.data?.industry ?? null,
+          domain_type: siteResult.data?.domain_type ?? null,
+          website_emissions: emissionsResult.data,
+        },
+        totalScans: emissionsCount.count ?? 0,
       }),
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=300" // Cache for 5 minutes
+        "Cache-Control": "public, max-age=300",
       }
     };
   } catch (error) {
@@ -69,4 +81,4 @@ export async function handler(event) {
       headers: { "Content-Type": "application/json" }
     };
   }
-};
+}
