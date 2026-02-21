@@ -4,10 +4,13 @@ import pLimit from 'p-limit';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+const supabaseUrl = process.env.PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Missing required environment variables: PUBLIC_SUPABASE_URL and/or SUPABASE_SERVICE_ROLE_KEY');
+  process.exit(1);
+}
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Limit concurrent operations
 const limit = pLimit(10);
@@ -39,21 +42,33 @@ async function logError(url, errorType, errorMessage, severity = 'error', detail
 async function getPageDataSize(url) {
   let browser;
   try {
-    browser = await puppeteer.launch({ 
-      headless: true, 
-      args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
     let totalBytes = 0;
 
+    // Buffer each response body to get its actual byte length.
+    // Relying solely on the content-length header misses chunked transfer
+    // encoding responses (the majority of modern sites), which return 0.
     page.on('response', async (response) => {
-      const headers = response.headers();
-      if (headers['content-length']) {
-        totalBytes += parseInt(headers['content-length'], 10);
+      try {
+        const buffer = await response.buffer();
+        totalBytes += buffer.length;
+      } catch {
+        // Some responses (e.g. streams, aborted) cannot be buffered — skip them.
+        const headers = response.headers();
+        if (headers['content-length']) {
+          totalBytes += parseInt(headers['content-length'], 10);
+        }
       }
     });
 
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 10000 });
+    // networkidle2 waits until no more than 2 in-flight requests for 500ms,
+    // giving async resources (images, fonts, scripts) time to load and be
+    // counted. 30s timeout is generous enough for slow government sites.
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
     return totalBytes;
   } catch (error) {
     await logError(
@@ -104,7 +119,7 @@ function estimateEmissions(bytes, isGreen) {
 async function processDomain(site) {
   try {
     const isGreen = await checkGreenHosting(site.domain);
-    const totalBytes = await getPageDataSize(`http://${site.domain}`);
+    const totalBytes = await getPageDataSize(`https://${site.domain}`);
     const estimatedCO2 = estimateEmissions(totalBytes, isGreen);
     
     const record = {
@@ -164,16 +179,30 @@ async function processSites() {
 
     if (dailyError) throw dailyError;
 
-    // Get weekly sites for current day
-    // Using PostgreSQL's EXTRACT(DOW FROM NOW()) for day of week
-    const { data: weeklySites, error: weeklyError } = await supabase
+    // Get weekly sites for current day.
+    // Rather than relying on an optional check_day column, we distribute sites
+    // deterministically across days of the week using a hash of the domain name.
+    // This guarantees each weekly site is scanned on exactly one day per week
+    // without requiring any additional database schema changes.
+    const { data: allWeeklySites, error: weeklyError } = await supabase
       .from('monitored_sites')
       .select('*')
       .eq('is_active', true)
-      .eq('monitoring_frequency', 'weekly')
-      .eq('check_day', dayOfWeek); // Assuming we have a check_day column
+      .eq('monitoring_frequency', 'weekly');
 
     if (weeklyError) throw weeklyError;
+
+    function getDayForDomain(domain) {
+      let hash = 0;
+      for (let i = 0; i < domain.length; i++) {
+        hash = (hash * 31 + domain.charCodeAt(i)) & 0x7fffffff;
+      }
+      return hash % 7;
+    }
+
+    const weeklySites = (allWeeklySites || []).filter(
+      site => getDayForDomain(site.domain) === dayOfWeek
+    );
 
     // Combine the results
     const sites = [...(dailySites || []), ...(weeklySites || [])];

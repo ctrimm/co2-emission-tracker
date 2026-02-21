@@ -30,8 +30,8 @@ export const columns: ColumnDef<Emission>[] = [
       )
     },
     cell: ({ row }) => {
-      const date = row.getValue<Date>("date"); // <-- Get the Date object directly
-      return <div>{date}</div>; // <-- No need to format the date
+      const date = row.getValue<string>("date");
+      return <div>{date}</div>;
     }
   },
   {

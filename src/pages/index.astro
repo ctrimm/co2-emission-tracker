@@ -4,8 +4,8 @@ import { siteConfig } from "@/config/site";
 import MainLayout from "@/layouts/main-layout.astro";
 import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
-import { TableWrapper } from "@/components/ui/wrapper";
-import { fetchUniqueEmissions, fetchSites } from "@/lib/api";
+import { TableWrapper, AreaChartWrapper } from "@/components/ui/wrapper";
+import { fetchStats, fetchTrend } from "@/lib/api";
 import {
   Card,
   CardContent,
@@ -15,34 +15,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-// Get today's date in YYYY-MM-DD format
-const today = new Date().toISOString().split('T')[0];
-
-// Fetch data using our API helpers
-let todaysEmissions = [];
-let totalIndexesRun = 0;
-let uniqueSiteCount = 0;
+// Fetch pre-aggregated stats and 30-day trend in parallel.
+// This replaces the previous approach of downloading all emissions rows
+// just to compute three numbers on the client.
+let stats = {
+  totalActiveSites: 0,
+  totalIndexesRun: 0,
+  averageCO2Grams: 0,
+  greenHostedPercent: 0,
+  latestScanDate: '',
+};
+let trendChartData: { date: string; name: string; co2: number; industryAverageCo2: number }[] = [];
 
 try {
-  // Fetch unique emissions and sites data in parallel
-  const [emissionsData, sitesData] = await Promise.all([
-    fetchUniqueEmissions(),
-    fetchSites()
-  ]);
-
-  todaysEmissions = emissionsData.emissions || [];
-  totalIndexesRun = emissionsData.count || 0;
-  uniqueSiteCount = sitesData.count || 0;
+  const [statsData, trendData] = await Promise.all([fetchStats(), fetchTrend()]);
+  stats = statsData;
+  trendChartData = (trendData.trend || []).map((point: { date: string; averageCO2: number }) => ({
+    date: point.date,
+    name: 'Daily Average',
+    co2: point.averageCO2,
+    industryAverageCo2: 0.5, // global average reference line
+  }));
 } catch (error) {
   console.error('Error fetching data:', error);
 }
 
-const formattedCount = new Intl.NumberFormat('en-US').format(uniqueSiteCount);
-
-// Calculate averages from today's data
-const averageGramsPerLoad = todaysEmissions.length > 0
-  ? todaysEmissions.reduce((acc, cur) => acc + (cur.estimated_co2_grams || 0), 0) / todaysEmissions.length
-  : 0;
+const formattedCount = new Intl.NumberFormat('en-US').format(stats.totalActiveSites);
 
 // Time since midnight EST
 const now = new Date();
@@ -62,27 +60,20 @@ function formatNumber(num: number) {
   }
 }
 
-// Percentage of Green Hosted Sites
-const greenSites = todaysEmissions?.filter(item => item.is_green === true).length || 0;
-const totalSites = todaysEmissions?.length || 0;
-const greenPercentage = totalSites > 0 
-  ? ((greenSites / totalSites) * 100).toFixed(2) 
-  : "0.00";
-
 const summaryCardInfo = [
   {
     cardTitle: "Total Indexes Run",
-    cardContent: formatNumber(totalIndexesRun),
+    cardContent: formatNumber(stats.totalIndexesRun),
     cardFooter: timeSinceMidnight,
   },
   {
     cardTitle: "Average CO2",
-    cardContent: `${averageGramsPerLoad.toFixed(3)} g`,
+    cardContent: `${stats.averageCO2Grams.toFixed(3)} g`,
     cardFooter: "per 1 view",
   },
   {
     cardTitle: "% Green Hosted",
-    cardContent: `${greenPercentage}%`,
+    cardContent: `${stats.greenHostedPercent.toFixed(2)}%`,
     cardFooter: "of indexed sites",
   },
 ];
@@ -118,9 +109,7 @@ const summaryCardInfo = [
           Read More
         </a>
         <a
-          href={siteConfig.links.github}
-          target="_blank"
-          rel="noreferrer"
+          href="/add-site"
           class={cn(buttonVariants({ variant: "outline", size: "lg" }), "px-4")}
         >
           <Icon name="github" class="mr-2 size-5" />
@@ -141,16 +130,8 @@ const summaryCardInfo = [
     <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
       Quick Glance
     </h2>
-    <!-- <p
-      class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text"
-    >
-      Quick summary of what we've got indexed.
-    </p> -->
   </div>
-  <!-- Data Table from the CSV file -->
-  <!-- Iterate over emissionsResultsJSON and display in a table -->
   <div class="mx-auto max-w-[64rem] overflow-x-auto pt-8">
-    <!-- Individual Cards For Top-Level Metrics -->
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 pt-4 pb-10">
       {summaryCardInfo.map((card) => (
         <Card className="hover:shadow hover:shadow-xl hover:shadow-emerald-500/50">
@@ -169,6 +150,22 @@ const summaryCardInfo = [
     </div>
   </div>
 </section>
+
+  <!-- 30-Day Trend Chart -->
+  <section id="trend" class="container py-8 md:py-12 lg:py-12">
+    <div class="mx-auto flex flex-col items-center space-y-4 text-center pb-8">
+      <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+        30-Day Trend
+      </h2>
+      <p class="max-w-[85%] lg:max-w-[55%] leading-normal text-muted-foreground sm:text-lg sm:leading-7 balance-text">
+        Average CO2 per page view across all monitored sites. The lower line is the
+        0.5 g global industry average for reference.
+      </p>
+    </div>
+    <div class="mx-auto max-w-[64rem] rounded-lg border bg-background">
+      <AreaChartWrapper client:load data={trendChartData} />
+    </div>
+  </section>
 
   <!-- Data Table Section + Text -->
   <section
@@ -200,8 +197,6 @@ const summaryCardInfo = [
         Click on a domain name to see more details about the site.
       </p>
     </div>
-    <!-- Data Table from the CSV file -->
-    <!-- Iterate over emissionsResultsJSON and display in a table -->
     <div class="mx-auto max-w-[64rem] overflow-x-auto">
       <TableWrapper client:load />
     </div>
