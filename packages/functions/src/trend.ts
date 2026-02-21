@@ -28,6 +28,7 @@ export async function handler(event) {
         .from('website_emissions')
         .select('date, estimated_co2_grams, is_green')
         .gte('date', sinceStr)
+        .gt('estimated_co2_grams', 0)   // exclude rows where Puppeteer failed (0 bytes → 0 CO2)
         .order('date', { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
       if (error) throw error;
